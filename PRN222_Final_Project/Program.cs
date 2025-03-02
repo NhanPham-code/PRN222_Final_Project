@@ -17,7 +17,7 @@ namespace PRN222_Final_Project
 
             // Inject DB
             builder.Services.AddDbContext<BakeryShopDbContext>(options =>
-                           options.UseSqlServer(builder.Configuration.GetConnectionString("PRN222_Final_ProjectContext")));
+                           options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
             // Inject Dao
             builder.Services.AddScoped(typeof(ICrudDAO<,>), typeof(CrudDAO<,>));
