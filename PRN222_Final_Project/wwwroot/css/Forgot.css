@@ -1,0 +1,114 @@
+﻿* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    height: 100dvh;
+    display: block;
+    justify-content: center;
+    align-items: center;
+}
+.forgot-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+}
+.background {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh; /* Đảm bảo nó chiếm toàn bộ chiều cao màn hình */
+    padding: 2.5rem;
+    background-image: url('/img/PRODUCT/Background/Bakery.jpg');
+    background-size: cover;
+    background-position: center;
+}
+
+.container2 {
+    background: white;
+    border-radius: 10px;
+    width: 600px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    margin: auto; /* Căn giữa theo chiều ngang */
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Căn giữa nội dung bên trong */
+    justify-content: center; /* Căn giữa theo chiều dọc nếu cần */
+}
+
+.form-section {
+    padding: 40px;
+    flex: 1;
+}
+
+.info-section {
+    margin-bottom: 20px; /* Thêm khoảng cách cho phần thông tin */
+}
+
+h2 {
+    margin-bottom: 20px;
+    text-align: center; /* Căn giữa tiêu đề */
+    font-family: "Oleo Script", serif;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+input[type="email"],
+input[type="text"],
+input[type="password"] {
+    width: 100%;
+    padding: 15px; /* Tăng kích thước padding */
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 16px; /* Tăng kích thước font */
+}
+
+input:focus {
+    border-color: #007bff;
+    outline: none;
+}
+
+.btn {
+    width: 100%;
+    padding: 15px; /* Tăng kích thước padding */
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 18px; /* Tăng kích thước font */
+    margin: 12px 0; /* Thêm khoảng cách trên nút */
+    transition: transform 0.2s, background-color 0.2s; /* Thêm hiệu ứng chuyển tiếp */
+}
+
+    .btn:hover {
+        background-color: #0056b3;
+        transform: translateY(-3px); /* Nâng nút lên một chút khi hover */
+    }
+
+.info-section p {
+    margin: 10px 0;
+    text-align: center; /* Căn giữa nội dung */
+}
+
+.sign-in-link {
+    color: #007bff;
+    text-decoration: none;
+    transition: color 0.2s, text-shadow 0.2s; /* Thêm hiệu ứng chuyển tiếp */
+}
+
+    .sign-in-link:hover {
+        color: #0056b3; /* Đổi màu khi hover */
+        text-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Thêm bóng cho chữ khi hover */
+    }
+

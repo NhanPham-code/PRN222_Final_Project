@@ -1,0 +1,343 @@
+﻿/* Đặt tất cả các phần tử sử dụng box-sizing, margin và padding mặc định */
+
+
+/* Kiểu dáng cho thân trang */
+body {
+    height: 100vh;
+}
+
+
+/* Kiểu dáng cho tiêu đề chính */
+h1 {
+    font-weight: bold;
+    margin: 0;
+}
+
+/* Kiểu dáng cho đoạn văn */
+p {
+    font-size: 14px;
+    font-weight: 100;
+    line-height: 20px;
+    letter-spacing: 0.5px;
+    margin: 20px 0 30px;
+}
+
+/* Kiểu dáng cho nút */
+.btn {
+    border-radius: 20px;
+    border: 1px solid #FFFFFF;
+    background-color: #f7811b;
+    color: #FFFFFF;
+    font-size: 12px;
+    font-weight: bold;
+    padding: 12px 45px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    transition: transform 80ms ease-in, background-color 0.3s ease; /* Thêm hiệu ứng chuyển đổi */
+    margin-top: 15px;
+    text-decoration: none;
+}
+
+/* Hiệu ứng khi di chuột qua nút */
+button:hover {
+    background-color: #0091c5; /* Màu xanh đậm hơn khi hover */
+    cursor: pointer; /* Thay đổi con trỏ chuột thành hình tay */
+    text-decoration: underline; /* Thêm gạch chân khi hover */
+}
+
+/* Kiểu dáng cho nút loại ghost */
+button.ghost {
+    background-color: transparent;
+    border-color: #FFFFFF;
+}
+
+    /* Hiệu ứng khi di chuột qua nút ghost */
+    button.ghost:hover {
+        background-color: rgba(255, 255, 255, 0.2); /* Nền nhạt khi hover */
+        color: #fff; /* Thay đổi màu chữ */
+    }
+
+/* Hiệu ứng khi nhấn nút */
+button:active {
+    transform: scale(0.95);
+}
+
+/* Kiểu dáng cho biểu mẫu */
+form {
+    background-color: #FFFFFF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding: 0 50px;
+    height: 100%;
+    text-align: center;
+}
+
+/* Kiểu dáng cho các trường nhập liệu */
+input {
+    background-color: #eee;
+    border: none;
+    padding: 12px 15px;
+    margin: 10px 0;
+    width: 100%;
+    border-radius: 20px;
+}
+
+/* Kiểu dáng cho container chính */
+#container {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+    position: relative;
+    overflow: hidden;
+    width: 768px;
+    max-width: 100%;
+    min-height: 575px;
+}
+
+/* Kiểu dáng cho form-container */
+.form-container {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    transition: all 0.6s ease-in-out;
+}
+
+/* Kiểu dáng cho container đăng nhập */
+.sign-in-container {
+    left: 0;
+    width: 50%;
+    z-index: 2;
+}
+
+/* Khi active, dịch chuyển container đăng nhập */
+.container.right-panel-active .sign-in-container {
+    transform: translateX(100%);
+}
+
+/* Kiểu dáng cho container đăng ký */
+.sign-up-container {
+    left: 0;
+    width: 50%;
+    opacity: 0;
+    z-index: 1;
+}
+
+/* Khi active, hiển thị container đăng ký */
+.container.right-panel-active .sign-up-container {
+    transform: translateX(100%);
+    opacity: 1;
+    z-index: 5;
+    animation: show 0.6s;
+}
+
+/* Hoạt ảnh để hiển thị container đăng ký */
+@keyframes show {
+    0%, 49.99% {
+        opacity: 0;
+        z-index: 1;
+    }
+
+    50%, 100% {
+        opacity: 1;
+        z-index: 5;
+    }
+}
+
+/* Kiểu dáng cho liên kết Hủy */
+.cancel-link {
+    display: inline-block;
+    background-color: #ff4d4d; /* Màu đỏ cho nút hủy */
+    color: white;
+    font-size: 12px;
+    font-weight: bold;
+    padding: 12px 45px;
+    margin-top: 10px;
+    border-radius: 20px;
+    text-align: center;
+    text-decoration: none;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    transition: background-color 0.3s ease;
+}
+
+    /* Hiệu ứng khi di chuột qua liên kết Hủy */
+    .cancel-link:hover {
+        background-color: #d43838; /* Màu đỏ đậm hơn khi hover */
+        color: #fff;
+    }
+
+/* Kiểu dáng cho overlay-container */
+.overlay-container {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 50%;
+    height: 100%;
+    overflow: hidden;
+    transition: transform 0.6s ease-in-out;
+    z-index: 100;
+}
+
+/* Khi active, dịch chuyển overlay-container */
+.container.right-panel-active .overlay-container {
+    transform: translateX(-100%);
+}
+
+/* Kiểu dáng cho overlay */
+.overlay {
+    background: #f7811b;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: 0 0;
+    color: #FFFFFF;
+    position: relative;
+    left: -100%;
+    height: 100%;
+    width: 200%;
+    transform: translateX(0);
+    transition: transform 0.6s ease-in-out;
+}
+
+/* Khi active, dịch chuyển overlay */
+.container.right-panel-active .overlay {
+    transform: translateX(50%);
+}
+
+/* Kiểu dáng cho các panel trong overlay */
+.overlay-panel {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding: 0 40px;
+    text-align: center;
+    top: 0;
+    height: 100%;
+    width: 50%;
+    transform: translateX(0);
+    transition: transform 0.6s ease-in-out;
+}
+
+/* Kiểu dáng cho overlay bên trái */
+.overlay-left {
+    transform: translateX(-20%);
+}
+
+/* Khi active, điều chỉnh vị trí overlay bên trái */
+.container.right-panel-active .overlay-left {
+    transform: translateX(0);
+}
+
+/* Kiểu dáng cho overlay bên phải */
+.overlay-right {
+    right: 0;
+    transform: translateX(0);
+}
+
+/* Khi active, điều chỉnh vị trí overlay bên phải */
+.container.right-panel-active .overlay-right {
+    transform: translateX(20%);
+}
+
+/* Kiểu dáng cho container chứa các biểu tượng mạng xã hội */
+.social-container {
+    margin: 20px 0;
+}
+
+    /* Kiểu dáng cho các liên kết trong container mạng xã hội */
+    .social-container a {
+        border: 1px solid #DDDDDD;
+        border-radius: 50%;
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        margin: 0 5px;
+        height: 40px;
+        width: 40px;
+        transition: background-color 0.3s ease, border-color 0.3s ease; /* Hiệu ứng chuyển đổi mượt mà */
+    }
+
+        /* Hiệu ứng khi di chuột qua các biểu tượng mạng xã hội */
+        .social-container a:hover {
+            background-color: rgba(255, 255, 255, 0.2); /* Nền nhạt cho biểu tượng khi hover */
+            border-color: #1c3de1; /* Thay đổi màu viền */
+        }
+
+/* Kiểu dáng cho các liên kết */
+.forgot a {
+    color: #333;
+    font-size: 14px;
+    text-decoration: none;
+    margin: 15px 0;
+}
+
+/* Hiệu ứng khi di chuột qua các liên kết */
+.forgot a:hover {
+    color: #c73e07; /* Thay đổi màu liên kết khi hover */
+    text-decoration: underline; /* Thêm gạch chân khi hover */
+    transition: color 0.3s ease, text-decoration 0.3s ease; /* Hiệu ứng chuyển đổi mượt mà */
+}
+
+/* Container cho input mật khẩu và biểu tượng con mắt */
+.password-container {
+    position: relative; /* Giữ vị trí tương đối cho khung nhập mật khẩu */
+    width: 100%; /* Đảm bảo input chiếm toàn bộ chiều rộng */
+    display: flex; /* Sử dụng Flexbox để căn chỉnh */
+    align-items: center; /* Căn giữa theo chiều dọc */
+}
+
+    /* Kiểu dáng cho các trường nhập liệu */
+    .password-container input[type="password"],
+    .password-container input[type="text"] {
+        padding-right: 40px; /* Thêm khoảng cách cho biểu tượng */
+        width: 100%; /* Đảm bảo input chiếm toàn bộ chiều rộng */
+        border-radius: 20px; /* Thêm bo tròn cho input */
+        border: 1px solid #ddd; /* Thêm đường viền cho input */
+        margin-bottom: 20px; /* Điều chỉnh khoảng cách dưới khung nhập */
+        height: 50px; /* Đặt chiều cao cố định cho input */
+        font-size: 16px; /* Kích thước chữ */
+    }
+
+    /* Styles for the eye icon */
+    .password-container i {
+        position: absolute; /* Đặt biểu tượng ở vị trí tuyệt đối */
+        right: 15px; /* Vị trí biểu tượng bên trong input */
+        top: 50%; /* Căn giữa theo chiều dọc */
+        transform: translateY(-50%); /* Đưa biểu tượng vào giữa khung nhập */
+        color: #aaa; /* Màu mặc định */
+        font-size: 18px; /* Kích thước biểu tượng */
+        cursor: pointer; /* Chuyển đổi con trỏ thành hình tay */
+    }
+
+        .password-container i.fa-eye {
+            color: black; /* Màu khi mật khẩu bị ẩn */
+        }
+
+        .password-container i.fa-eye-slash {
+            color: black; /* Màu khi mật khẩu hiển thị */
+        }
+
+/* Thêm các kiểu cho thông báo lỗi */
+.error-message {
+    color: red;
+    font-size: 0.9em;
+    margin-top: 5px;
+    display: none; /* Ẩn mặc định */
+}
+
+.error-message {
+    color: red;
+    font-size: 12px;
+    margin-top: 5px;
+}
+
+.background {
+    padding: 2.5rem;
+    min-height: 80vh;
+    background-image: url('/img/PRODUCT/Background/Bakery.jpg');
+    background-size: cover; /* Ensures the image covers the entire element */
+    background-position: center; /* Centers the image */
+}

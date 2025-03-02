@@ -1,0 +1,173 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản lí sản phẩm</title>
+    <link rel="stylesheet" href="~/css/ProductManagment.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        .modal {
+            display: none; /* Ẩn modal mặc định */
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 101%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-content {
+            background-color: #fff;
+            margin: 10% auto;
+            padding: 20px;
+            width: 50%;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="main-content">
+        <div class="container">
+            <div class="search-bar-pro">
+                <input type="text" class="search-input fas fa-search" placeholder="Search for products...">
+                <select id="status-filter">
+                    <option value="">All Status</option>
+                    <option value="In Stock">In Stock</option>
+                    <option value="Out of Stock">Out of Stock</option>
+                </select>
+                <select id="filterCategory">
+                    <option value="">All Categories</option>
+                </select>
+            </div>
+            <div class="action-buttons">
+                <button class="add-btn" id="add-product-btn">Add Product</button>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Image</th>
+                        <th>Product Name</th>
+                        <th>Status</th>
+                        <th>Category</th>
+                        <th>Price</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="product-table-body">
+                    @for (int i = 0; i < 5; i++)
+                    {
+                        <tr>
+                            <td>@i</td>
+                            <td><img src="~/img/PRODUCT/Bread/Golden Lava Bun.png" width="50"></td>
+                            <td>Golden</td>
+                            <td>In Stock</td>
+                            <td>Bread</td>
+                            <td>12đ</td>
+                            <td>
+                                <button class="edit-btn" onclick="openEditModal(@i, '/img/PRODUCT/Bread/Golden Lava Bun.png', 'Golden', 'Bread', 12)">Update</button>
+                                <button class="delete-btn" onclick="deleteProduct()">Delete</button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <div id="pagination-container" class="pagination"></div>
+        </div>
+    </div>
+
+    <!-- Modal Add Product -->
+    <div id="product-modal" class="modal">
+        <div class="modal-content">
+            <h3 id="modal-title">Add Product</h3>
+            <form id="product-form" method="post" enctype="multipart/form-data" action="/Product/Save">
+                <input type="hidden" id="product-id" name="Id">
+                <label for="product-image">Product Image:</label>
+                <input type="file" id="product-image" name="ImageFile" accept="image/*">
+                <label for="product-name">Product Name:</label>
+                <input type="text" id="product-name" name="Name" required>
+                <label for="product-price">Price:</label>
+                <input type="number" id="product-price" name="Price" min="0" required>
+                <label for="product-category">Category:</label>
+                <input type="text" id="product-category" name="Category" required>
+                <div class="modal-buttons">
+                    <button type="submit" class="btn btn-save">Save</button>
+                    <button type="button" class="btn btn-close" data-modal="product-modal">Close</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Edit Product -->
+    <div id="edit-product-modal" class="modal">
+        <div class="modal-content">
+            <h3>Edit Product</h3>
+            <form id="edit-product-form" method="post" enctype="multipart/form-data" action="/Product/Update">
+                <input type="hidden" id="edit-product-id" name="Id">
+                <label>Current Image:</label>
+                <img id="current-image" src="" width="100" alt="Current Image">
+                <label for="edit-product-image">Change Image:</label>
+                <input type="file" id="edit-product-image" name="ImageFile" accept="image/*">
+                <label for="edit-product-name">Product Name:</label>
+                <input type="text" id="edit-product-name" name="Name" required>
+                <label for="edit-product-price">Price:</label>
+                <input type="number" id="edit-product-price" name="Price" min="0" required>
+                <label for="edit-product-category">Category:</label>
+                <input type="text" id="edit-product-category" name="Category" required>
+                <div class="modal-buttons">
+                    <button type="submit" class="btn btn-save">Save</button>
+                    <button type="button" class="btn btn-close" data-modal="edit-product-modal">Close</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Hiển thị modal khi nhấn nút "Add Product"
+        document.getElementById("add-product-btn").addEventListener("click", function () {
+            let modal = document.getElementById("product-modal");
+            document.getElementById("modal-title").innerText = "Add Product";
+            document.getElementById("product-form").reset(); // Xóa dữ liệu cũ
+            modal.style.display = "block";
+        });
+
+        // Hiển thị modal khi nhấn "Update"
+        document.querySelectorAll(".edit-btn").forEach(button => {
+            button.addEventListener("click", function () {
+                let modal = document.getElementById("edit-product-modal");
+                modal.style.display = "block";
+
+                // Giả lập dữ liệu cần sửa (Bạn có thể thay bằng dữ liệu thực tế)
+                document.getElementById("edit-product-id").value = "1";
+                document.getElementById("current-image").src = "/img/PRODUCT/Bread/Golden Lava Bun.png";
+                document.getElementById("edit-product-name").value = "Golden";
+                document.getElementById("edit-product-price").value = "12";
+                document.getElementById("edit-product-category").value = "Bread";
+            });
+        });
+
+        // Đóng modal khi nhấn nút "Close"
+        document.querySelectorAll(".btn-close").forEach(button => {
+            button.addEventListener("click", function () {
+                let modalId = this.getAttribute("data-modal");
+                document.getElementById(modalId).style.display = "none";
+            });
+        });
+
+        // Đóng modal khi nhấn ra ngoài
+        window.onclick = function (event) {
+            if (event.target.classList.contains("modal")) {
+                event.target.style.display = "none";
+            }
+        }
+    </script>
+</body>
+
+</html>

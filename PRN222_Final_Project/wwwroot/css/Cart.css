@@ -1,0 +1,144 @@
+﻿.content {
+    margin: 0 auto;
+    padding: 40px;
+}
+
+.hero {
+    background-image: url('/img/PRODUCT/Background/Bakery.jpg'); /* Thay URL ảnh nền */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 300px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem 0;
+}
+
+.breadcrumb-item + .breadcrumb-item::before {
+    color: #fff !important;
+}
+
+#cartTable {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: Arial, sans-serif;
+    margin: 10px 0;
+}
+
+#cartTable th,
+#cartTable td {
+    padding: 10px;
+}
+
+#cartTable tbody tr {
+    background-color: #fff;
+}
+
+#cartTable tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.product-image {
+    width: 150px;
+    height: 100px;
+}
+
+.quantity-control {
+    display: flex;
+    align-items: center;
+    border: 1px solid #000;
+    width: 120px; /* Điều chỉnh kích thước */
+}
+
+.quantity-btn {
+    width: 30px;
+    height: 30px;
+    border: none;
+    background: none;
+    font-size: 18px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.quantity-input {
+    width: 60px;
+    height: 30px;
+    text-align: center;
+    font-weight: bold;
+    border-left: 1px solid #000;
+    border-right: 1px solid #000;
+    border-top: none;
+    border-bottom: none;
+}
+
+.total-row {
+    background-color: #D19F65;
+}
+
+.btn-checkout {
+    background-color: #b87c3c;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    text-transform: uppercase;
+    display: block;
+    margin: 0 auto;
+    margin-bottom: 20px;
+}
+
+/* Custom X checkbox styles */
+.checkbox-container {
+    display: inline-block;
+    position: relative;
+    cursor: pointer;
+}
+
+.checkbox-input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.checkbox-svg {
+    width: 24px;
+    height: 24px;
+    border-radius: 4px;
+    background: white;
+    border: 2px solid #ccc;
+    transition: all 0.3s ease;
+}
+
+.checkbox-input:checked + .checkbox-svg {
+    background: #007bff;
+    border-color: #007bff;
+}
+
+.x-mark {
+    stroke: white;
+    stroke-width: 2;
+    stroke-dasharray: 30;
+    stroke-dashoffset: 30;
+    transition: stroke-dashoffset 0.3s ease;
+}
+
+.checkbox-input:checked + .checkbox-svg .x-mark {
+    stroke-dashoffset: 0;
+}
+
+.checkbox-container:hover .checkbox-svg {
+    border-color: #007bff;
+}
+.remove-btn {
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+    .remove-btn:hover {
+        color: red;
+    }

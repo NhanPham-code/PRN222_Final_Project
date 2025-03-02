@@ -1,0 +1,189 @@
+﻿.content {
+    margin: 0 auto;
+    padding: 40px;
+}
+
+
+.hero {
+    background-image: url('/img/PRODUCT/Background/Bakery.jpg'); /* Thay URL ảnh nền */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 300px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem 0;
+}
+
+.header-cart {
+    font-size: 1.5rem;
+    color: white;
+    font-weight: bold;
+    margin-bottom: 1rem;
+}
+
+.header-cart {
+    font-size: 2rem;
+    color: white;
+    margin-bottom: 0.5rem; /* Khoảng cách giữa HOME và breadcrumb */
+    text-transform: uppercase;
+}
+
+    .header-cart .separator {
+        margin: 0 0.5rem;
+    }
+
+.breadcrumb {
+    font-size: 1rem;
+    color: white;
+}
+
+    .breadcrumb a {
+        color: white;
+        text-decoration: none;
+        transition: color 0.3s ease;
+    }
+
+        .breadcrumb a:hover {
+            color: #f7811b; /* Màu cam khi hover */
+        }
+
+.breadcrumb-item + .breadcrumb-item::before {
+    content: "/";
+    color: white; /* Dấu "/" màu trắng */
+    padding: -1px 0.5rem;
+}
+
+.breadcrumb-item.active {
+    color: white; /* Màu trắng cho Product */
+}
+
+
+.product-info {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    font-family: "Rubik", serif;
+}
+
+.product-image {
+    max-width: 300px;
+    border-radius: 10px;
+}
+
+.product-description {
+    max-width: 400px;
+    text-align: left;
+}
+
+.quantity {
+    display: flex;
+    align-items: center;
+}
+
+    .quantity button {
+        width: 60px;
+        height: 60px;
+    }
+
+    .quantity input {
+        width: 100px;
+        height: 60px;
+    }
+
+.similar-products {
+    text-align: center;
+    margin-top: 50px;
+    font-family: "Rubik", serif;
+}
+
+.product-list {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+}
+
+.product-card {
+    text-align: center;
+    width: 200px;
+}
+
+    .product-card img {
+        width: 100%;
+        border-radius: 10px;
+    }
+
+    .product-card .btn {
+        background-color: rgb(247, 129, 27);
+    }
+
+.product-card-info {
+    text-align: left;
+    padding-left: 15px;
+}
+
+.btn {
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    background-color: rgb(208, 160, 62);
+    color: white;
+    font-weight: bold;
+    font-family: "IBM Plex Mono", serif;
+}
+
+    .btn:hover {
+        background-color: gainsboro; /* Đổi màu nền */
+    }
+
+.swiper {
+    position: relative;
+    width: 70%; /* Đảm bảo slider chiếm hết chiều ngang container */
+    overflow: hidden;
+}
+
+.swiper-wrapper {
+    display: flex;
+}
+
+.swiper-slide {
+    flex-shrink: 0;
+    width: calc(100% / 4); /* Hiển thị 4 sản phẩm mỗi lần */
+    text-align: center;
+    box-sizing: border-box;
+}
+
+
+.swiper-button-next,
+.swiper-button-prev {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 40px;
+    height: 40px;
+    background-color: transparent; /* Nền trong suốt */
+    border: none; /* Loại bỏ viền */
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease; /* Hiệu ứng mượt */
+}
+
+    .swiper-button-next:hover,
+    .swiper-button-prev:hover {
+        background-color: rgba(255, 255, 255, 0.1); /* Nền mờ nhẹ khi hover */
+        transform: scale(1.1); /* Phóng to nhẹ khi hover */
+    }
+
+    .swiper-button-next svg,
+    .swiper-button-prev svg {
+        width: 20px;
+        height: 20px;
+        color: #fff; /* Mũi tên màu trắng */
+    }

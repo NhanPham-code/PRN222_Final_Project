@@ -1,0 +1,258 @@
+﻿/* Reset mặc định */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+    width: 100%;
+    height: 100%;
+}
+
+/* Khi sidebar ẩn */
+.sidebar.hidden + .navbar-horizontal + .main-content .container {
+    width: 100%; /* Toàn màn hình khi sidebar bị ẩn */
+}
+
+/* Đặt chiều rộng của main-content để bao toàn bộ khu vực hiển thị */
+.main-content {
+    padding: 0;
+    width: 100%;
+    height: 66.2dvh;
+}
+
+/* Cập nhật container */
+.container {
+    width: 100%;
+    max-width: 1250px;
+    margin: 0 auto;
+    border: 2px solid #ccc;
+    padding: 15px;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    margin-top: 60px;
+}
+
+/* Thanh công cụ chứa bộ lọc và tìm kiếm */
+.toolbar {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+    align-items: center;
+}
+
+#filterSelect,
+.search-container input {
+    padding: 8px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+#filterSelect {
+    padding-right: 12px;
+}
+
+.search-container {
+    position: relative;
+    width: 300px;
+}
+
+    .search-container input {
+        width: 100%;
+        padding-right: 35px;
+    }
+
+    .search-container button {
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        border: none;
+        background: none;
+        font-size: 18px;
+        cursor: pointer;
+        color: #333;
+    }
+
+        .search-container button:hover {
+            color: #000;
+        }
+
+/* Bảng và cột */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+th, td {
+    border: 1px solid #ccc;
+    padding: 8px;
+    text-align: left;
+}
+
+th {
+    background-color: #bdbcbc;
+}
+
+tfoot td {
+    border-top: 2px solid #000;
+    padding-top: 10px;
+    text-align: right;
+}
+
+/* Style trạng thái */
+.status-new {
+    font-weight: bold;
+    color: #000;
+    background-color: #e0e0e0;
+}
+
+.status-completed {
+    color: green;
+    background-color: #d4edda;
+}
+
+.status-canceled {
+    color: red;
+    background-color: #f8d7da;
+}
+
+/* Tổng tiền */
+#orderTotal {
+    color: green;
+}
+
+#cancelTotal {
+    color: red;
+}
+
+/* Nút điều khiển trong bảng */
+.control-buttons {
+    display: flex;
+    gap: 5px;
+}
+
+    .control-buttons button {
+        background: none;
+        border: none;
+        cursor: pointer;
+        font-size: 1em;
+        color: #555;
+        padding: 5px;
+        border-radius: 4px;
+        transition: background-color 0.3s, color 0.3s;
+    }
+
+        .control-buttons button:hover {
+            background-color: #e0e0e0;
+            color: #000;
+        }
+
+    .control-buttons .check-btn {
+        color: #28a745;
+    }
+
+    .control-buttons .x-btn {
+        color: #ffc107;
+    }
+
+    .control-buttons .delete-btn {
+        color: #dc3545;
+    }
+
+    .control-buttons button.disabled {
+        cursor: not-allowed;
+        opacity: 0.5;
+        pointer-events: none;
+    }
+
+/* Phân trang */
+#pagination {
+    margin: 10px 0;
+    text-align: center;
+}
+
+    #pagination button {
+        padding: 5px 10px;
+        margin: 0 5px;
+        cursor: pointer;
+        border: 1px solid #ccc;
+        background-color: #fff;
+        border-radius: 4px;
+        transition: background-color 0.3s;
+    }
+
+        #pagination button:hover {
+            background-color: #f0f0f0;
+        }
+
+/* Responsive */
+@media (max-width: 768px) {
+    .container {
+        padding: 10px;
+        max-width: 100%;
+    }
+
+    table {
+        font-size: 14px;
+    }
+
+    .toolbar {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    #pagination button {
+        padding: 5px;
+    }
+}
+/* Thiết lập bảng */
+#orderTable {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: Arial, sans-serif;
+    border: 2px solid #FF7518; /* Pumpkin */
+}
+
+    /* Header của bảng */
+    #orderTable thead {
+        background-color: #FF8C00; /* Dark Orange */
+        color: white;
+    }
+
+    #orderTable th {
+        padding: 12px;
+        text-align: left;
+        border: 1px solid #FF7518; /* Viền cam đậm */
+    }
+
+        /* Định dạng cột Name riêng biệt */
+        #orderTable th.name-column {
+            background-color: #FFA500; /* Orange */
+        }
+
+    /* Dòng dữ liệu */
+    #orderTable td {
+        padding: 10px;
+        border: 1px solid #FF7518;
+    }
+
+    /* Màu xen kẽ giữa các dòng */
+    #orderTable tbody tr:nth-child(even) {
+        background-color: #FFE5B4; /* Peach */
+    }
+
+    #orderTable tbody tr:nth-child(odd) {
+        background-color: #FFF5E1; /* Light Peach */
+    }
+
+    /* Hover */
+    #orderTable tbody tr:hover {
+        background-color: #FFD580; /* Light Orange */
+        transition: 0.3s;
+    }

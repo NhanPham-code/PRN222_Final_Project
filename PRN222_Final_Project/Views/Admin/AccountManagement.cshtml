@@ -1,0 +1,98 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account Management</title>
+    <link rel="stylesheet" href="/css/AccountManagement.css">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+  
+
+    <div class="main-content">
+        <div class="container">
+            <div class="header">
+                <div class="search-group">
+                    <input type="text" id="search" placeholder="Search by account or role">
+                    <button class="search-btn" id="searchBtn">Search</button>
+                </div>
+            </div>
+
+            <!-- Table Section -->
+            <table>
+                <thead>
+                    <tr>
+                        <th class="name-column">ID</th>
+                        <th class="name-column">Email</th>
+                        <th class="name-column">Password</th>
+                        <th class="name-column">Role</th>
+                        <th class="name-column">Status</th>
+                        <th class="name-column">Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="accountTable">
+                    <tr>
+                        <td>1</td>
+                        <td>john.doe@example.com</td>
+                        <td>*******</td>
+                        <td>User</td>
+                        <td>Active</td>
+                        <td><button class="delete-btn" onclick="deleteAccount(1)">Delete</button></td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>jane.smith@example.com</td>
+                        <td>*******</td>
+                        <td>User</td>
+                        <td>Inactive</td>
+                        <td><button class="delete-btn" onclick="deleteAccount(2)">Delete</button></td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>michael.brown@example.com</td>
+                        <td>*******</td>
+                        <td>User</td>
+                        <td>Active</td>
+                        <td><button class="delete-btn" onclick="deleteAccount(3)">Delete</button></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- Pagination Controls -->
+            <div id="pagination" class="pagination"></div>
+        </div>
+    </div>
+
+    <script src="/js/AccountManagement.js"></script>
+
+    <script>
+        function loadHTML(elementId, url) {
+            fetch(url)
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById(elementId).innerHTML = data;
+                    const script = document.createElement('script');
+                    script.src = 'Admin-js/Navbars.js';
+                    document.body.appendChild(script);
+                });
+        }
+
+        loadHTML('navbars-placeholder', 'Navbars.html');
+
+        function deleteAccount(id) {
+            const row = document.querySelector(`#accountTable tr:nth-child(${id})`);
+            if (row) row.remove();
+        }
+    </script>
+</body>
+
+</html>
