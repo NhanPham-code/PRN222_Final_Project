@@ -1,3 +1,9 @@
+using BLL.Interfaces;
+using BLL.Services;
+using DataAccess.DAOs;
+using DataAccess.Models;
+using Microsoft.EntityFrameworkCore;
+
 namespace PRN222_Final_Project
 {
     public class Program
@@ -8,6 +14,16 @@ namespace PRN222_Final_Project
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+
+            // Inject DB
+            builder.Services.AddDbContext<BakeryShopDbContext>(options =>
+                           options.UseSqlServer(builder.Configuration.GetConnectionString("PRN222_Final_ProjectContext")));
+
+            // Inject Dao
+            builder.Services.AddScoped(typeof(ICrudDAO<,>), typeof(CrudDAO<,>));
+
+            // Inject Repo
+            builder.Services.AddScoped(typeof(ICrudRepo<,>), typeof(CrudRepo<,>));
 
             var app = builder.Build();
 
