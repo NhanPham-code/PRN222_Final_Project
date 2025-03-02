@@ -8,14 +8,23 @@ namespace PRN222_Final_Project.Controllers
     public class HomeController : Controller
     {
         private ICrudRepo<Product, int> _productRepo;
+        private ICrudRepo<Category, int> _categoryRepo;
 
-        public HomeController(ICrudRepo<Product, int> _productRepo)
+        public HomeController(ICrudRepo<Product, int> _productRepo, ICrudRepo<Category, int> categoryRepo)
         {
             this._productRepo = _productRepo;
+            _categoryRepo = categoryRepo;
         }
 
         public async Task<IActionResult> Index()
         {
+            // get category
+            var categories = (await _categoryRepo.GetAll()).ToList();
+            if (categories != null) 
+            {
+                ViewBag.Categories = categories;
+            }
+
             // get bestseller
             var rainbow = await _productRepo.GetById(22);
             var bunny = await _productRepo.GetById(8);

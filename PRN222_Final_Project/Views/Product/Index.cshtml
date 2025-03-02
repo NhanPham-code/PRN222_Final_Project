@@ -1,6 +1,9 @@
-﻿@{
+﻿@using DataAccess.Models
+@{
     ViewData["Title"] = "Product";
 }
+
+@model List<Product>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -128,35 +131,35 @@
             <div class="col-md-2 product-card">
                 <div class="card">
                     <div class="card-body text-white">
-                        <h5 class="card-title">Bread</h5>
+                        <h5 class="card-title"><a asp-action="Index" asp-controller="Product" asp-route-categoryId="1" style="color:white; text-decoration:none">Bread</a></h5>
                     </div>
                 </div>
             </div>
             <div class="col-md-2 product-card">
                 <div class="card">
                     <div class="card-body text-white">
-                        <h5 class="card-title">Cake Slice</h5>
+                        <h5 class="card-title"><a asp-action="Index" asp-controller="Product" asp-route-categoryId="2" style="color:white; text-decoration:none">Cake Slice</a></h5>
                     </div>
                 </div>
             </div>
             <div class="col-md-2 product-card">
                 <div class="card">
                     <div class="card-body text-white">
-                        <h5 class="card-title">Savory</h5>
+                        <h5 class="card-title"><a asp-action="Index" asp-controller="Product" asp-route-categoryId="3" style="color:white; text-decoration:none">Savory</a></h5>
                     </div>
                 </div>
             </div>
             <div class="col-md-2 product-card">
                 <div class="card">
                     <div class="card-body text-white">
-                        <h5 class="card-title">Special</h5>
+                        <h5 class="card-title"><a asp-action="Index" asp-controller="Product" asp-route-categoryId="4" style="color:white; text-decoration:none">Special</a></h5>
                     </div>
                 </div>
             </div>
             <div class="col-md-2 product-card">
                 <div class="card">
                     <div class="card-body text-white">
-                        <h5 class="card-title">Sweet</h5>
+                        <h5 class="card-title"><a asp-action="Index" asp-controller="Product" asp-route-categoryId="5" style="color:white; text-decoration:none">Sweet</a></h5>
                     </div>
                 </div>
             </div>
@@ -169,57 +172,29 @@
                 <hr style="width: 15%; margin: 0; border-top: 2px solid #f7811b;">
             </div>
             <h1 class="header-cart text-center" style="color:#f7811b">
-                BREAD
+                @{
+                    var productCate = Model.FirstOrDefault();
+                }
+                @productCate?.Category?.CategoryName
             </h1>
         </div>
     </div>
     <!-- Food List Section -->
     <div class="container mt-4">
         <div class="row row-cols-1 row-cols-md-4 g-4 justify-content-center" style="margin: 0 -40px;">
-            <!-- Food Item 1 -->
-            <div class="col">
-                <div class="card h-100 text-center">
-                    <img src="/img/product/bread/croissant.png" class="card-img-top" alt="Garlic Bread">
-                    <div class="card-body">
-                        <h5 class="card-title">Garlic Bread</h5>
-                        <p class="card-text text-warning fw-bold">$5.99</p>
-                        <button class="btn btn-warning text-white">Add to Cart</button>
+            @foreach(var product in Model)
+            {
+                <div class="col">
+                    <div class="card h-100 text-center">
+                        <img src="~/@product.ImageUrl" class="card-img-top" alt="@product.ProductName">
+                        <div class="card-body">
+                            <h5 class="card-title">@product.ProductName</h5>
+                            <p class="card-text text-warning fw-bold">$@product.Price</p>
+                            <button class="btn btn-warning text-white">Add to Cart</button>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <!-- Food Item 2 -->
-            <div class="col">
-                <div class="card h-100 text-center">
-                    <img src="/img/product/bread/golden lava bun.png" class="card-img-top" alt="Cheese Bread">
-                    <div class="card-body">
-                        <h5 class="card-title">Cheese Bread</h5>
-                        <p class="card-text text-warning fw-bold">$6.99</p>
-                        <button class="btn btn-warning text-white">Add to Cart</button>
-                    </div>
-                </div>
-            </div>
-            <!-- Food Item 3 -->
-            <div class="col">
-                <div class="card h-100 text-center">
-                    <img src="/img/product/bread/gourment fruit loaf.png" class="card-img-top" alt="Baguette">
-                    <div class="card-body">
-                        <h5 class="card-title">Baguette</h5>
-                        <p class="card-text text-warning fw-bold">$4.99</p>
-                        <button class="btn btn-warning text-white">Add to Cart</button>
-                    </div>
-                </div>
-            </div>
-            <!-- Food Item 4 -->
-            <div class="col">
-                <div class="card h-100 text-center">
-                    <img src="/img/product/bread/sausage standard.png" class="card-img-top" alt="Whole Wheat Bread">
-                    <div class="card-body">
-                        <h5 class="card-title">Whole Wheat Bread</h5>
-                        <p class="card-text text-warning fw-bold">$7.99</p>
-                        <button class="btn btn-warning text-white">Add to Cart</button>
-                    </div>
-                </div>
-            </div>
+            }
         </div>
     </div>
     <!-- Bootstrap JS -->

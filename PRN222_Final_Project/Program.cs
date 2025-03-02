@@ -25,6 +25,9 @@ namespace PRN222_Final_Project
             // Inject Repo
             builder.Services.AddScoped(typeof(ICrudRepo<,>), typeof(CrudRepo<,>));
 
+            // Inject Product Service
+            builder.Services.AddScoped(typeof(ProductService));
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
