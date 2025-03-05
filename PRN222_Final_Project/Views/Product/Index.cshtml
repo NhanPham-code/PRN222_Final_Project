@@ -102,6 +102,12 @@
             margin: 0 40px;
         }
 
+
+        a:hover .card {
+            transform: translateY(-5px); /* Di chuyển lên 5px */
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2); /* Tạo hiệu ứng đổ bóng */
+            transition: all 0.3s ease-in-out;
+        }
     </style>
 </head>
 <body>
@@ -172,10 +178,15 @@
                 <hr style="width: 15%; margin: 0; border-top: 2px solid #f7811b;">
             </div>
             <h1 class="header-cart text-center" style="color:#f7811b">
-                @{
+                @if (ViewBag.Category == null)
+                {
                     var productCate = Model.FirstOrDefault();
+                    @productCate?.Category?.CategoryName
+                } else
+                {
+                    @ViewBag.Category;
                 }
-                @productCate?.Category?.CategoryName
+
             </h1>
         </div>
     </div>
@@ -184,16 +195,18 @@
         <div class="row row-cols-1 row-cols-md-4 g-4 justify-content-center" style="margin: 0 -40px;">
             @foreach(var product in Model)
             {
-                <div class="col">
-                    <div class="card h-100 text-center">
-                        <img src="~/@product.ImageUrl" class="card-img-top" alt="@product.ProductName">
-                        <div class="card-body">
-                            <h5 class="card-title">@product.ProductName</h5>
-                            <p class="card-text text-warning fw-bold">$@product.Price</p>
-                            <button class="btn btn-warning text-white">Add to Cart</button>
+                <a asp-action="Index" asp-controller="Detail" asp-route-productId="@product.ProductId" style="text-decoration:none;">
+                    <div class="col">
+                        <div class="card h-100 text-center">
+                            <img src="~/@product.ImageUrl" class="card-img-top" alt="@product.ProductName">
+                            <div class="card-body">
+                                <h5 class="card-title">@product.ProductName</h5>
+                                <p class="card-text text-warning fw-bold">$@product.Price</p>
+                                <button class="btn btn-warning text-white">Add to Cart</button>
+                            </div>
                         </div>
                     </div>
-                </div>
+                </a>
             }
         </div>
     </div>

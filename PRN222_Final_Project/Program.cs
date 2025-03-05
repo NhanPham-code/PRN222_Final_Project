@@ -1,7 +1,8 @@
-using BLL.Interfaces;
+﻿using BLL.Interfaces;
 using BLL.Services;
 using DataAccess.DAOs;
 using DataAccess.Models;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 
 namespace PRN222_Final_Project
@@ -28,6 +29,26 @@ namespace PRN222_Final_Project
             // Inject Product Service
             builder.Services.AddScoped(typeof(ProductService));
 
+            // Inject Email Service
+            builder.Services.AddScoped(typeof(EmailService));
+
+            builder.Services.AddDistributedMemoryCache();
+            builder.Services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromMinutes(30); // Session tồn tại trong 30 phút
+                options.Cookie.HttpOnly = true;
+                options.Cookie.IsEssential = true;
+            });
+
+            /*builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+            .AddCookie(options =>
+            {
+                options.LoginPath = "/Common/Login"; // Đường dẫn đến trang đăng nhập
+                options.LogoutPath = "/Common/Logout"; // Đường dẫn đăng xuất
+                options.AccessDeniedPath = "/Common/AccessDenied"; // Trang lỗi nếu không có quyền
+            });*/
+
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -42,6 +63,8 @@ namespace PRN222_Final_Project
             app.UseStaticFiles();
 
             app.UseRouting();
+
+            app.UseSession(); // add session
 
             app.UseAuthorization();
 

@@ -24,29 +24,30 @@
         <div class="container" id="container">
             <!-- Sign Up Form -->
             <div class="form-container sign-up-container">
-                <form asp-action="" asp-controller="">
+                <form asp-action="Register" asp-controller="Common" method="post">
+                    @Html.AntiForgeryToken()
                     <h1 style="margin: 20px">Register</h1>
 
                     <!-- Tên người dùng -->
-                    <input type="text" id="signupName" placeholder="Fullname" required />
+                    <input type="text" id="signupName" placeholder="Fullname" name="fullname" required />
                     <span class="error-message" id="signupNameError"></span>
 
                     <!-- Email -->
-                    <input type="email" id="signupEmail" placeholder="Email" required />
+                    <input type="email" id="signupEmail" placeholder="Email" name="email" required />
                     <span class="error-message" id="signupEmailError"></span>
 
-                    <input type="text" id="signupAdress" placeholder="Address" required />
+                    <input type="text" id="signupAdress" placeholder="Address" name="address" required />
                     <span class="error-message" id="signupAdressError"></span>
 
-                    <input type="text" id="signupPhoneNumber" placeholder="Phone Number" required />
+                    <input type="text" id="signupPhoneNumber" placeholder="Phone Number" name="phone" required />
                     <span class="error-message" id="signupPhoneNumberError"></span>
 
                     <!-- Mật khẩu -->
                     <div class="password-container">
-                        <input type="password" id="signupPassword" placeholder="Password" required />
+                        <input type="password" id="signupPassword" placeholder="Password" name="password" required />
                         <i class="fas fa-eye" id="toggleSignupPassword" style="cursor: pointer;" aria-label="Show password"></i>
                     </div>
-                    <span class="error-message" id="signupPasswordError"></span>
+                    <span class="error-message">@ViewBag.Error</span>
 
 
                     <button type="submit" class="btn">Register</button>
@@ -56,20 +57,24 @@
 
             <!-- Sign In Form -->
             <div class="form-container sign-in-container">
-                <form asp-action="" asp-controller="">
+                <form asp-action="Login" asp-controller="Common" method="post">
+                    @Html.AntiForgeryToken()
                     <h1 style="margin: 20px">Sign In</h1>
-                    <input type="email" placeholder="Email" required />
+                    <input type="email" placeholder="Email" name="email" required />
                     <div class="password-container">
-                        <input type="password" id="password" placeholder="Password" required />
+                        <input type="password" id="password" placeholder="Password" name="password" required />
                         <i class="fas fa-eye" id="togglePassword" style="cursor: pointer;" aria-label="Show password"></i>
                     </div>
                     <div class="forgot">
-                        <a href="ForgotPassword.html">Forgot password</a>
+                        <a asp-action="Forgot" asp-controller="Common">Forgot password</a>
                     </div>
                     <button type="submit" class="btn">Log</button>
                     <a class="cancel-link">Cancel</a>
                 </form>
+
+                <span class="error-message">@ViewBag.Error</span>
             </div>
+
             <!-- Overlay Panel -->
             <div class="overlay-container">
                 <div class="overlay">
@@ -87,7 +92,47 @@
             </div>
         </div>
     </div>
-    <script src="~/js/Login.js"></script>
+    @* <script src="~/js/Login.js"></script> *@
+    <script>
+        // Lấy các phần tử từ DOM
+        const signUpButton = document.getElementById('signUp');
+        const signInButton = document.getElementById('signIn');
+        const container = document.getElementById('container');
+
+        // Thêm sự kiện cho nút Đăng ký và Đăng nhập để chuyển đổi giao diện
+        signUpButton.addEventListener('click', () => {
+            container.classList.add("right-panel-active");
+        });
+
+        signInButton.addEventListener('click', () => {
+            container.classList.remove("right-panel-active");
+        });
+
+        // Xử lý hiển thị mật khẩu cho form đăng ký
+        const toggleSignupPassword = document.getElementById('toggleSignupPassword');
+        const signupPasswordField = document.getElementById('signupPassword');
+
+        toggleSignupPassword.addEventListener('click', function () {
+            const type = signupPasswordField.type === 'password' ? 'text' : 'password';
+            signupPasswordField.type = type;
+            this.classList.toggle('fa-eye-slash');
+            this.classList.toggle('fa-eye');
+            this.setAttribute('aria-label', type === 'password' ? 'Hiện mật khẩu' : 'Ẩn mật khẩu');
+        });
+
+
+        // Xử lý hiển thị mật khẩu cho form đăng nhập
+        const togglePassword = document.getElementById('togglePassword');
+        const passwordField = document.getElementById('password');
+
+        togglePassword.addEventListener('click', function () {
+            const type = passwordField.type === 'password' ? 'text' : 'password';
+            passwordField.type = type;
+            this.classList.toggle('fa-eye-slash');
+            this.classList.toggle('fa-eye');
+            this.setAttribute('aria-label', type === 'password' ? 'Hiện mật khẩu' : 'Ẩn mật khẩu');
+        });
+    </script>
 </body>
 
 </html>

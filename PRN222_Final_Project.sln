@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34728.123
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PRN222_Final_Project", "PRN222_Final_Project\PRN222_Final_Project.csproj", "{7F491E2D-8E5B-43EC-9A73-1A5CDFDEE0EC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PRN222_Final_Project", "PRN222_Final_Project\PRN222_Final_Project.csproj", "{7F491E2D-8E5B-43EC-9A73-1A5CDFDEE0EC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAccess", "DataAccess\DataAccess.csproj", "{D037C6D7-3DFD-44BD-8BFD-91CF625BCE5B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAccess", "DataAccess\DataAccess.csproj", "{D037C6D7-3DFD-44BD-8BFD-91CF625BCE5B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BLL", "BLL\BLL.csproj", "{E4346E3F-A6E7-48A2-AD56-1CEBB08B9DC2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BLL", "BLL\BLL.csproj", "{E4346E3F-A6E7-48A2-AD56-1CEBB08B9DC2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Razor_UI", "Razor_UI\Razor_UI.csproj", "{4C2D83C7-8E7D-4384-956B-A7489D9D5879}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Razor_UI", "Razor_UI\Razor_UI.csproj", "{4C2D83C7-8E7D-4384-956B-A7489D9D5879}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

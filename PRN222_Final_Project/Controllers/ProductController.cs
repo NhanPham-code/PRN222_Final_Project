@@ -27,14 +27,38 @@ namespace PRN222_Final_Project.Controllers
                 ViewBag.Categories = categories;
             }
 
+            // get product by default category
             if (categoryId == 0)
             {
-                var productsDefault = await productService.GetProductsByCategory(DEFAULT_CATEGORY_ID_TO_DIPLAY_PRODUCT);
+                ViewBag.Category = "All Products";
+                var productsDefault = await productService.GetProductsByCategory(categoryId);
                 return View(productsDefault.ToList());
             }
 
+            // get products by category
             var products = await productService.GetProductsByCategory(categoryId);
             return View(products.ToList());
+        }
+
+        public async Task<IActionResult> Search(string searchKey)
+        {
+            // Lấy danh sách danh mục để hiển thị trong ViewBag
+            var categories = (await _categoryRepo.GetAll()).ToList();
+            ViewBag.Categories = categories;
+
+            // Nếu searchKey rỗng, lấy sản phẩm mặc định
+            if (string.IsNullOrWhiteSpace(searchKey))
+            {
+                var productsDefault = await productService.GetProductsByCategory(DEFAULT_CATEGORY_ID_TO_DIPLAY_PRODUCT);
+                return View("Index", productsDefault.ToList());
+            }
+
+            // Lấy sản phẩm theo từ khóa
+            var searchResults = await productService.GetProductByName(searchKey);
+
+            // Trả về Index view với kết quả tìm kiếm
+            return View("Index", searchResults.ToList());
+
         }
     }
 }
