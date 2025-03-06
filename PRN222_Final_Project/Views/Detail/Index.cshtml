@@ -76,15 +76,17 @@
                 <div class="swiper d-flex">
                     <div class="swiper-wrapper">
                         @foreach (Product productSimilar in ViewBag.SimilarProducts)
-                        {
-                            <div class="product-card swiper-slide">
-                                <img src="~/@productSimilar.ImageUrl" alt="a" />
-                                <div class="product-card-info">
-                                    <h4>@productSimilar?.ProductName</h4>
-                                    <p>$ @productSimilar?.Price</p>
-                                </div>
-                                <button class="btn">Add to Cart</button>
-                            </div>
+                        {     
+                                <div class="product-card swiper-slide">
+                                    <a asp-action="Index" asp-controller="Detail" asp-route-productId="@productSimilar?.ProductId" style="color:black; text-decoration:none">
+                                    <img src="~/@productSimilar.ImageUrl" alt="a" />
+                                    <div class="product-card-info">
+                                        <h4>@productSimilar?.ProductName</h4>
+                                        <p>$ @productSimilar?.Price</p>
+                                    </div>
+                                    <button class="btn">Add to Cart</button>
+                                    </a>
+                                </div>             
                         }
                     </div>
                     <button class="swiper-button-next">

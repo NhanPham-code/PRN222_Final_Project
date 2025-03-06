@@ -60,6 +60,16 @@
             background-color: #fff;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
+            .product a {
+                color:black;
+                text-decoration:none;
+            }    
+
+            .product a:hover {
+                transform: translateY(-5px); /* Di chuyển lên 5px */
+                box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2); /* Tạo hiệu ứng đổ bóng */
+                transition: all 0.3s ease-in-out;
+            }
 
             .product img {
                 width: 100%;
@@ -159,38 +169,32 @@
     <section class="bestSeller">
 
         <div class="product">
-            <form>
-                <input type="hidden" name="id" value="@rainbow?.ProductId">
-
+            <a asp-action="Index" asp-controller="Detail" asp-route-productId="@rainbow?.ProductId">
                 <h2 style="font-family: 'Baskerville Old Face'">@rainbow?.ProductName Cake</h2>
                 <img src="@rainbow?.ImageUrl" />
                 <p>@rainbow?.Description</p>
-                <p>Price: @rainbow?.Price $</p>
-            </form>
+                <p>Price: $ @rainbow?.Price</p>
+            </a>
         </div>
 
 
         <div class="product">
-            <form>
-                <input type="hidden" name="id" value="@bunny?.ProductId">
-
+            <a asp-action="Index" asp-controller="Detail" asp-route-productId="@bunny?.ProductId">
                 <h2 style="font-family: 'Baskerville Old Face'">@bunny?.ProductName Cake</h2>
                 <img src="@bunny?.ImageUrl" />
                 <p>@bunny?.Description</p>
-                <p>Price: @bunny?.Price $</p>
-            </form>
+                <p>Price: $ @bunny?.Price</p>
+            </a>
         </div>
 
 
         <div class="product">
-            <form>
-                <input type="hidden" name="id" value="@lava?.ProductId">
-
+            <a asp-action="Index" asp-controller="Detail" asp-route-productId="@lava?.ProductId">
                 <h2 style="font-family: 'Baskerville Old Face'">@lava?.ProductName Cake</h2>
                 <img src="@lava?.ImageUrl" />
                 <p>@lava?.Description</p>
-                <p>Price: @lava?.Price $</p>
-            </form>
+                <p>Price: $ @lava?.Price $</p>
+            </a>
         </div>
     </section>
 
