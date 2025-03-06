@@ -19,10 +19,10 @@ namespace BLL.Services
 
         public async Task<Product> GetProductById(int id)
         {
-            var product = await _productRepo.GetByIdWithInclude(id, "ProductId", p => p.Carts, p => p.Category, p => p.OrderDetails) ?? new Product() ;
+            var product = await _productRepo.GetByIdWithInclude(id, "ProductId", p => p.Carts, p => p.Category, p => p.OrderDetails) ?? new Product();
             return product;
         }
-       
+
         public async Task<List<Product>> GetAllProduct()
         {
             var products = await _productRepo.GetAllWithInclude(p => p.Carts, p => p.Category, p => p.OrderDetails);
@@ -31,8 +31,8 @@ namespace BLL.Services
 
         public async Task<List<Product>> GetProductsByCategory(int categoryId)
         {
-            if(categoryId == 0)
-            { 
+            if (categoryId == 0)
+            {
                 // get all
                 var allProducts = await _productRepo.GetAllWithInclude(p => p.Carts, p => p.Category, p => p.OrderDetails);
                 return allProducts.ToList();

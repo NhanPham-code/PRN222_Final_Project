@@ -68,11 +68,13 @@
                     <div class="forgot">
                         <a asp-action="Forgot" asp-controller="Common">Forgot password</a>
                     </div>
+
+                    <p class="error-message text-danger">@ViewBag.ErrorLogin</p>
+
                     <button type="submit" class="btn">Log</button>
                     <a class="cancel-link">Cancel</a>
                 </form>
 
-                <span class="error-message">@ViewBag.Error</span>
             </div>
 
             <!-- Overlay Panel -->

@@ -20,7 +20,7 @@ namespace PRN222_Final_Project.Controllers
         {
             // get category
             var categories = (await _categoryRepo.GetAll()).ToList();
-            if (categories != null) 
+            if (categories != null)
             {
                 ViewBag.Categories = categories;
             }
@@ -29,7 +29,7 @@ namespace PRN222_Final_Project.Controllers
             var rainbow = await _productRepo.GetById(22);
             var bunny = await _productRepo.GetById(8);
             var lava = await _productRepo.GetById(2);
-            if(rainbow != null && bunny != null && lava != null)
+            if (rainbow != null && bunny != null && lava != null)
             {
                 ViewData["rainbow"] = rainbow;
                 ViewData["bunny"] = bunny;
@@ -41,7 +41,7 @@ namespace PRN222_Final_Project.Controllers
                 ViewData["bunny"] = null;
                 ViewData["lava"] = null;
             }
-           
+
             return View();
         }
     }

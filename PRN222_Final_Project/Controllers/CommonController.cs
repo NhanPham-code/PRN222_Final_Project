@@ -72,10 +72,11 @@ namespace PRN222_Final_Project.Controllers
             }
 
             // Kiểm tra mật khẩu
-            if (!VerifyPassword(password, user.PasswordHash, user.PasswordSalt))
+            if (!VerifyPassword(password, user.PasswordSalt, user.PasswordHash))
             {
-                ViewBag.Error = "Invalid email or password.";
-                return View();
+                ViewBag.ErrorLogin = "Wrong email or password.";
+                Console.WriteLine(ViewBag.ErrorLogin);
+                return View("Login");
             }
 
             // Lưu thông tin user vào Session
@@ -87,21 +88,23 @@ namespace PRN222_Final_Project.Controllers
         }
 
         // Kiểm tra mật khẩu
-        private bool VerifyPassword(string password, byte[] storedHash, byte[] storedSalt)
+        private bool VerifyPassword(string password, byte[] storedSalt, byte[] storedHash)
         {
-            using (var hmac = new HMACSHA512(storedSalt)) // Dùng lại Salt cũ
+            using (var hmac = new HMACSHA512(storedSalt)) // Dùng lại storedSalt để tạo HMACSHA512
             {
-                byte[] computedHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password)); // Băm lại mật khẩu nhập vào
-                return computedHash.SequenceEqual(storedHash); // So sánh với hash đã lưu
+                byte[] computedHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password)); // Tạo hash mới từ password nhập vào
+
+                // So sánh toàn bộ 64 byte
+                return computedHash.SequenceEqual(storedHash);
             }
         }
 
-        private void HashPassword(string password, out byte[] passwordHash, out byte[] passwordSalt)
+        private void HashPassword(string password, out byte[] passwordSalt, out byte[] passwordHash)
         {
             using (var hmac = new HMACSHA512())
             {
-                passwordSalt = hmac.Key; // Tạo khóa ngẫu nhiên làm salt
-                passwordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password));
+                passwordSalt = hmac.Key; // Tạo salt (128 byte)
+                passwordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password)); // Băm ra 64 byte
             }
         }
 
@@ -206,6 +209,6 @@ namespace PRN222_Final_Project.Controllers
 
             return RedirectToAction("Login", "Common");
         }
-        
+
     }
 }

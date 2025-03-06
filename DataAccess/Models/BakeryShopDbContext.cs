@@ -19,6 +19,8 @@ public partial class BakeryShopDbContext : DbContext
 
     public virtual DbSet<Category> Categories { get; set; }
 
+    public virtual DbSet<Feedback> Feedbacks { get; set; }
+
     public virtual DbSet<Order> Orders { get; set; }
 
     public virtual DbSet<OrderDetail> OrderDetails { get; set; }
@@ -35,7 +37,7 @@ public partial class BakeryShopDbContext : DbContext
     {
         modelBuilder.Entity<Cart>(entity =>
         {
-            entity.HasKey(e => e.CartId).HasName("PK__Cart__51BCD79752457E2B");
+            entity.HasKey(e => e.CartId).HasName("PK__Cart__51BCD79785904124");
 
             entity.ToTable("Cart");
 
@@ -49,17 +51,17 @@ public partial class BakeryShopDbContext : DbContext
             entity.HasOne(d => d.Product).WithMany(p => p.Carts)
                 .HasForeignKey(d => d.ProductId)
                 .OnDelete(DeleteBehavior.Cascade)
-                .HasConstraintName("FK__Cart__ProductID__5441852A");
+                .HasConstraintName("FK__Cart__ProductID__52593CB8");
 
             entity.HasOne(d => d.User).WithMany(p => p.Carts)
                 .HasForeignKey(d => d.UserId)
                 .OnDelete(DeleteBehavior.Cascade)
-                .HasConstraintName("FK__Cart__UserID__534D60F1");
+                .HasConstraintName("FK__Cart__UserID__5165187F");
         });
 
         modelBuilder.Entity<Category>(entity =>
         {
-            entity.HasKey(e => e.CategoryId).HasName("PK__Categori__19093A2B4A54DC8E");
+            entity.HasKey(e => e.CategoryId).HasName("PK__Categori__19093A2BB5AF4F56");
 
             entity.HasIndex(e => e.CategoryName, "idx_Categories_Name");
 
@@ -68,13 +70,32 @@ public partial class BakeryShopDbContext : DbContext
             entity.Property(e => e.Description).HasMaxLength(255);
         });
 
+        modelBuilder.Entity<Feedback>(entity =>
+        {
+            entity.HasKey(e => e.FeedbackId).HasName("PK__Feedback__6A4BEDF66CC49DDA");
+
+            entity.ToTable("Feedback");
+
+            entity.HasIndex(e => e.UserId, "idx_Feedback_UserID");
+
+            entity.Property(e => e.FeedbackId).HasColumnName("FeedbackID");
+            entity.Property(e => e.Description).HasMaxLength(1000);
+            entity.Property(e => e.SubmittedDate)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
+            entity.Property(e => e.UserId).HasColumnName("UserID");
+
+            entity.HasOne(d => d.User).WithMany(p => p.Feedbacks)
+                .HasForeignKey(d => d.UserId)
+                .OnDelete(DeleteBehavior.Cascade)
+                .HasConstraintName("FK__Feedback__UserID__571DF1D5");
+        });
+
         modelBuilder.Entity<Order>(entity =>
         {
-            entity.HasKey(e => e.OrderId).HasName("PK__Orders__C3905BAF95DF54D5");
+            entity.HasKey(e => e.OrderId).HasName("PK__Orders__C3905BAF5BC5B529");
 
             entity.HasIndex(e => e.OrderDate, "idx_Orders_Date");
-
-            entity.HasIndex(e => e.OrderStatus, "idx_Orders_Status");
 
             entity.Property(e => e.OrderId).HasColumnName("OrderID");
             entity.Property(e => e.OrderDate)
@@ -94,12 +115,12 @@ public partial class BakeryShopDbContext : DbContext
             entity.HasOne(d => d.User).WithMany(p => p.Orders)
                 .HasForeignKey(d => d.UserId)
                 .OnDelete(DeleteBehavior.Cascade)
-                .HasConstraintName("FK__Orders__UserID__49C3F6B7");
+                .HasConstraintName("FK__Orders__UserID__45F365D3");
         });
 
         modelBuilder.Entity<OrderDetail>(entity =>
         {
-            entity.HasKey(e => e.OrderDetailId).HasName("PK__OrderDet__D3B9D30CFE9B56C5");
+            entity.HasKey(e => e.OrderDetailId).HasName("PK__OrderDet__D3B9D30C47793737");
 
             entity.Property(e => e.OrderDetailId).HasColumnName("OrderDetailID");
             entity.Property(e => e.OrderId).HasColumnName("OrderID");
@@ -109,17 +130,17 @@ public partial class BakeryShopDbContext : DbContext
             entity.HasOne(d => d.Order).WithMany(p => p.OrderDetails)
                 .HasForeignKey(d => d.OrderId)
                 .OnDelete(DeleteBehavior.Cascade)
-                .HasConstraintName("FK__OrderDeta__Order__4D94879B");
+                .HasConstraintName("FK__OrderDeta__Order__4CA06362");
 
             entity.HasOne(d => d.Product).WithMany(p => p.OrderDetails)
                 .HasForeignKey(d => d.ProductId)
                 .OnDelete(DeleteBehavior.Cascade)
-                .HasConstraintName("FK__OrderDeta__Produ__4E88ABD4");
+                .HasConstraintName("FK__OrderDeta__Produ__4D94879B");
         });
 
         modelBuilder.Entity<Product>(entity =>
         {
-            entity.HasKey(e => e.ProductId).HasName("PK__Products__B40CC6ED586AEF59");
+            entity.HasKey(e => e.ProductId).HasName("PK__Products__B40CC6EDC88D57C9");
 
             entity.HasIndex(e => e.ProductName, "idx_Products_Name");
 
@@ -139,14 +160,14 @@ public partial class BakeryShopDbContext : DbContext
             entity.HasOne(d => d.Category).WithMany(p => p.Products)
                 .HasForeignKey(d => d.CategoryId)
                 .OnDelete(DeleteBehavior.Cascade)
-                .HasConstraintName("FK__Products__Catego__4316F928");
+                .HasConstraintName("FK__Products__Catego__412EB0B6");
         });
 
         modelBuilder.Entity<User>(entity =>
         {
-            entity.HasKey(e => e.UserId).HasName("PK__Users__1788CCAC50BCE482");
+            entity.HasKey(e => e.UserId).HasName("PK__Users__1788CCAC59444753");
 
-            entity.HasIndex(e => e.Email, "UQ__Users__A9D10534B5204887").IsUnique();
+            entity.HasIndex(e => e.Email, "UQ__Users__A9D105346C9586B4").IsUnique();
 
             entity.HasIndex(e => e.Email, "idx_Users_Email");
 
