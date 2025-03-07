@@ -1,0 +1,447 @@
+﻿@page
+@model Razor_UI.Pages.Admin.AccountManagementModel
+@{
+}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account Management</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Reset các kiểu mặc định */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+        }
+
+        .main-content {
+            min-height: 64dvh;
+        }
+
+        .container {
+            max-width: 95%; /* Giới hạn chiều rộng tối đa là 90% */
+            margin: 60px auto; /* Giữ nguyên các giá trị margin */
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-top: 80px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .search-group {
+            display: flex;
+            align-items: center;
+        }
+
+            .search-group input[type="text"] {
+                width: 280px; /* Đặt chiều rộng cho khung tìm kiếm */
+            }
+
+        input[type="text"],
+        select {
+            padding: 8px; /* Điều chỉnh padding cho nhìn gọn gàng hơn */
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 15px;
+            width: 100%; /* Đảm bảo chiều rộng đầy đủ cho các trường */
+        }
+
+        .search-btn,
+        .add-account-btn {
+            padding: 10px 20px;
+            margin-left: 10px;
+            border: none;
+            background-color: #28a745;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+
+            .search-btn:hover,
+            .add-account-btn:hover {
+                background-color: #218838;
+            }
+
+        .actions {
+            margin-top: 21px;
+            display: flex;
+            gap: 10px;
+            justify-content: flex-start;
+            align-items: center;
+        }
+
+            .actions .icon {
+                font-size: 18px;
+                padding: 8px;
+                cursor: pointer;
+                border: none;
+                background: none;
+                color: inherit;
+                transition: color 0.3s ease;
+            }
+
+        .icon.user {
+            color: #28a745;
+        }
+
+        .icon.inactive {
+            color: #dc3545;
+        }
+
+        .icon.delete {
+            color: #6c757d;
+        }
+
+        .icon.edit {
+            color: #ffc107;
+        }
+
+        .icon.save {
+            color: #28a745;
+        }
+
+        .icon.cancel {
+            color: #dc3545;
+        }
+
+        .status-active {
+            color: green;
+            font-weight: bold;
+        }
+
+        .status-inactive,
+        .status-deleted {
+            color: red;
+            font-weight: bold;
+        }
+
+        /* Password Container in Table */
+        .password-container {
+            position: relative; /* Đặt position cho container */
+            display: flex; /* Sử dụng flexbox để căn chỉnh */
+            align-items: center; /* Căn giữa theo chiều dọc */
+            max-width: 200px; /* Đặt chiều rộng tối đa */
+        }
+
+        #formUsername {
+            height: 35px;
+            border: 1px solid #ccc;
+            border-radius: 5px; /* Bo tròn góc cho input */
+        }
+
+        .password-input {
+            padding: 6px 8px; /* Giảm padding để làm nhỏ hơn */
+            border: 1px solid #ccc;
+            border-radius: 5px; /* Bo tròn góc cho input */
+            font-size: 20px; /* Giảm kích thước font */
+            flex: 1; /* Cho phép input chiếm toàn bộ chiều rộng trong container */
+            width: 130px; /* Nếu muốn đặt chiều rộng cố định, bạn có thể sử dụng: */
+        }
+
+        .toggle-password {
+            cursor: pointer;
+            color: #555;
+            font-size: 16px; /* Giảm kích thước font */
+            position: absolute; /* Đặt position absolute */
+            right: 8px; /* Đặt vị trí bên phải */
+            top: 50%; /* Căn giữa theo chiều dọc */
+            transform: translateY(-50%); /* Căn giữa */
+            z-index: 10; /* Đặt z-index để nó nằm trên các phần tử khác */
+        }
+
+        /* Password Container in Form */
+        .password-container-form {
+            position: relative; /* Đặt position cho container */
+            width: 100%; /* Đảm bảo container chiếm toàn bộ chiều rộng */
+        }
+
+            .password-container-form .password-input {
+                padding: 6px 8px; /* Giảm padding để làm nhỏ hơn */
+                border: 1px solid #ccc;
+                border-radius: 5px; /* Bo tròn góc cho input */
+                font-size: 20px; /* Giảm kích thước font */
+                width: 100%; /* Đảm bảo chiều rộng đầy đủ */
+                padding-right: 30px; /* Khoảng cách cho icon */
+            }
+
+            .password-container-form .toggle-password {
+                cursor: pointer;
+                color: #555;
+                font-size: 20px; /* Giảm kích thước font */
+                position: absolute; /* Đặt position absolute */
+                right: 8px; /* Đặt vị trí bên phải */
+                top: 50%; /* Căn giữa theo chiều dọc */
+                transform: translateY(-50%); /* Căn giữa */
+                z-index: 10; /* Đặt z-index để nó nằm trên các phần tử khác */
+            }
+
+        .form-group {
+            margin-bottom: 15px;
+            display: flex;
+            flex-direction: column;
+        }
+
+            .form-group label {
+                margin-bottom: 5px;
+                font-weight: bold;
+            }
+
+        .form-buttons {
+            display: flex;
+            justify-content: center; /* Căn giữa các nút */
+            gap: 10px; /* Khoảng cách giữa các nút */
+            margin-top: 10px; /* Khoảng cách giữa các nút và phần còn lại */
+        }
+
+        .form-container {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(0, 0, 0, 0.7);
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+            .form-container.hidden {
+                display: none;
+            }
+
+        .form-content {
+            background-color: white;
+            padding: 25px 30px;
+            border-radius: 10px;
+            width: 400px; /* Đặt chiều rộng của form */
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .form-title {
+            font-size: 24px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .create-btn,
+        .cancel-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+
+        .create-btn {
+            background-color: #28a745;
+            color: white;
+        }
+
+            .create-btn:hover {
+                background-color: #218838;
+            }
+
+        .cancel-btn {
+            background-color: #dc3545;
+            color: white;
+        }
+
+            .cancel-btn:hover {
+                background-color: #c82333;
+            }
+
+        /* Pagination Styles */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+            .pagination button {
+                padding: 10px;
+                margin: 0 5px;
+                border: none;
+                background-color: #28a745;
+                color: white;
+                border-radius: 5px;
+                cursor: pointer;
+            }
+
+                .pagination button.active {
+                    background-color: #218838;
+                }
+
+                .pagination button:disabled {
+                    background-color: #ccc;
+                    cursor: not-allowed;
+                }
+        /* Thiết lập bảng */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-family: Arial, sans-serif;
+            border: 1px solid #666; /* Viền xám trung bình */
+        }
+
+        /* Header của bảng */
+        thead {
+            background-color: #444; /* Xám đậm */
+            color: white; /* Chữ trắng */
+        }
+
+        th {
+            background-color: #C3C3C3;
+            color: black;
+            padding: 12px;
+            text-align: left;
+            border: 1px solid #666; /* Viền xám */
+        }
+
+        /* Dòng dữ liệu */
+        td {
+            padding: 10px;
+            border: 1px solid #666; /* Viền xám */
+            text-align: center;
+        }
+
+            /* Định dạng cột hình ảnh */
+            td img {
+                border-radius: 8px;
+            }
+
+        /* Màu xen kẽ giữa các dòng */
+        tbody tr:nth-child(even) {
+            background-color: #f2f2f2; /* Xám nhạt */
+        }
+
+        tbody tr:nth-child(odd) {
+            background-color: #e6e6e6; /* Xám sáng hơn */
+        }
+
+        /* Hiệu ứng hover */
+        tbody tr:hover {
+            background-color: #d9d9d9; /* Xám sáng hơn khi hover */
+            transition: 0.3s;
+        }
+
+        /* Nút Delete */
+        .delete-btn {
+            padding: 10px 20px;
+            border: none;
+            background-color: #dc3545; /* Màu đỏ */
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+
+            .delete-btn:hover {
+                background-color: #c82333; /* Màu đỏ đậm hơn khi hover */
+            }
+    </style>
+</head>
+
+<body>
+  
+
+    <div class="main-content">
+        <div class="container">
+            <div class="header">
+                <div class="search-group">
+                    <input type="text" id="search" placeholder="Search by account or role">
+                    <button class="search-btn" id="searchBtn">Search</button>
+                </div>
+            </div>
+
+            <!-- Table Section -->
+            <table>
+                <thead>
+                    <tr>
+                        <th class="name-column">ID</th>
+                        <th class="name-column">Email</th>
+                        <th class="name-column">Password</th>
+                        <th class="name-column">Role</th>
+                        <th class="name-column">Status</th>
+                        <th class="name-column">Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="accountTable">
+                    <tr>
+                        <td>1</td>
+                        <td>john.doe@example.com</td>
+                        <td>*******</td>
+                        <td>User</td>
+                        <td>Active</td>
+                        <td><button class="delete-btn" onclick="deleteAccount(1)">Delete</button></td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>jane.smith@example.com</td>
+                        <td>*******</td>
+                        <td>User</td>
+                        <td>Inactive</td>
+                        <td><button class="delete-btn" onclick="deleteAccount(2)">Delete</button></td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>michael.brown@example.com</td>
+                        <td>*******</td>
+                        <td>User</td>
+                        <td>Active</td>
+                        <td><button class="delete-btn" onclick="deleteAccount(3)">Delete</button></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- Pagination Controls -->
+            <div id="pagination" class="pagination"></div>
+        </div>
+    </div>
+
+    <script src="/js/AccountManagement.js"></script>
+
+    <script>
+        function loadHTML(elementId, url) {
+            fetch(url)
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById(elementId).innerHTML = data;
+                    const script = document.createElement('script');
+                    script.src = 'Admin-js/Navbars.js';
+                    document.body.appendChild(script);
+                });
+        }
+
+        loadHTML('navbars-placeholder', 'Navbars.html');
+
+        function deleteAccount(id) {
+            const row = document.querySelector(`#accountTable tr:nth-child(${id})`);
+            if (row) row.remove();
+        }
+    </script>
+</body>
+
+</html>
