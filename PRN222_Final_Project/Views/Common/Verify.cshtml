@@ -113,16 +113,6 @@
                     <h2>Verify Email</h2>
                    <!-- Form nhập Code -->
                     <form id="verify-code-form" asp-action="Verify" asp-controller="Common">
-                        @if(ViewBag.Forgot != null) // set khi ở trang forgot password
-                        {
-                            <div class="form-group">
-                                <label for="user-email">Please enter your email:</label>
-                                <div class="input-group">
-                                    <input type="email" id="user-email" placeholder="Enter your email" name="verifyEmail" value="">
-                                    <span class="send-text" id="sendButton" onclick="startTimer()">Send (60s)</span>
-                                </div>
-                            </div>
-                        }
                         <div class="form-group">
                             <label for="code">Please enter your code:</label>
                             <input type="text" id="code" placeholder="Enter verification code" name="verifyCode">
