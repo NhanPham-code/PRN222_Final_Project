@@ -8,5 +8,10 @@ namespace PRN222_Final_Project.Controllers
         {
             return View();
         }
+
+        public IActionResult Checkout()
+        {
+            return View(); 
+        }
     }
 }

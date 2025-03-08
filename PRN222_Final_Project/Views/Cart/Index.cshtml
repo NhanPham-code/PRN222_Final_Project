@@ -58,20 +58,20 @@
             </thead>
             <tbody>
                 @* <tr>
-                    <td>
-                        <span class="remove-btn text-danger" style="cursor: pointer;">✖</span>
-                        <img src="~/img/PRODUCT/Bread/Croissant.png" asp-append-version="true" class="product-image" width="50">
-                    </td>
-                    <td>Croissant</td>
-                    <td class="price">32,000 VND</td>
-                    <td>
-                        <div class="quantity-control">
-                            <button class="quantity-btn decrease">-</button>
-                            <input type="text" class="quantity-input" value="1" readonly>
-                            <button class="quantity-btn increase">+</button>
-                        </div>
-                    </td>
-                    <td class="subtotal">32,000 VND</td>
+                <td>
+                <span class="remove-btn text-danger" style="cursor: pointer;">✖</span>
+                <img src="~/img/PRODUCT/Bread/Croissant.png" asp-append-version="true" class="product-image" width="50">
+                </td>
+                <td>Croissant</td>
+                <td class="price">32,000 VND</td>
+                <td>
+                <div class="quantity-control">
+                <button class="quantity-btn decrease">-</button>
+                <input type="text" class="quantity-input" value="1" readonly>
+                <button class="quantity-btn increase">+</button>
+                </div>
+                </td>
+                <td class="subtotal">32,000 VND</td>
                 </tr> *@
             </tbody>
             <tfoot>
@@ -182,8 +182,19 @@
                             data: null,
                             className: "align-middle",
                             render: function () {
-                            return `<span class="remove-btn text-danger" style="cursor: pointer; font-size: 20px;">✖</span>`;
-                        }
+                                return `
+                                                <label class="custom-checkbox">
+                                                    <input type="checkbox" />
+                                                    <svg viewBox="0 0 24 24" class="checkbox-border">
+                                                        <rect x="2" y="2" rx="5" ry="5" width="20" height="20" stroke="black" stroke-width="2" fill="none"/>
+                                                    </svg>
+                                                    <svg viewBox="0 0 24 24" class="check-icon">
+                                                        <path d="M4 4 L20 20 M20 4 L4 20" stroke="black" stroke-width="2" stroke-linecap="round"/>
+                                                    </svg>
+                                                </label>
+                                            `;
+
+                            }
                         },
                         {
                             title: "",
@@ -202,10 +213,10 @@
                         var quantityCell = $('td:eq(4)', row);
                         quantityCell.html(
                             `<div class="quantity-control">
-                                <button class="quantity-btn decrease">-</button>
-                                <input type="text" class="quantity-input" value="1" readonly>
-                                <button class="quantity-btn increase">+</button>
-                            </div>`
+                                            <button class="quantity-btn decrease">-</button>
+                                            <input type="text" class="quantity-input" value="1" readonly>
+                                            <button class="quantity-btn increase">+</button>
+                                        </div>`
                         );
                     }
                 });
@@ -272,11 +283,11 @@
             });
 
             $("#checkoutBtn").click(function () {
-                console.log("Open modal");
-                $('#checkoutModal').modal('show');
+                window.location.href = "/Cart/Checkout";
             });
+
             // Handle remove product
-             $(document).on("click", ".remove-btn", function () {
+            $(document).on("click", ".remove-btn", function () {
                 let row = $(this).closest("tr");
                 let productName = row.find("td:eq(2)").text();
                 let subtotalText = row.find("td:eq(5)").text();
