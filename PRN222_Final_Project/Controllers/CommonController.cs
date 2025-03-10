@@ -14,15 +14,15 @@ namespace PRN222_Final_Project.Controllers
     public class CommonController : Controller
     {
         private ICrudRepo<Category, int> _categoryRepo;
-        private ICrudRepo<User, int> _userRepo;
 
-        private EmailService emailService;
+        private UserService _userService;
+        private EmailService _emailService;
 
-        public CommonController(ICrudRepo<Category, int> categoryRepo, ICrudRepo<User, int> userRepo, EmailService emailService)
+        public CommonController(ICrudRepo<Category, int> categoryRepo, UserService userService, EmailService emailService)
         {
             _categoryRepo = categoryRepo;
-            _userRepo = userRepo;
-            this.emailService = emailService;
+            this._userService = userService;
+            this._emailService = emailService;
         }
 
         [HttpGet]
@@ -61,21 +61,11 @@ namespace PRN222_Final_Project.Controllers
                 return View();
             }
 
-            // check user exit (tach service)
-            var users = await _userRepo.GetAllWithInclude(u => u.Carts, u => u.Orders);
-            var user = users.FirstOrDefault(u => string.Equals(u.Email.Trim(), email.Trim(), StringComparison.OrdinalIgnoreCase));
+            var user = await _userService.Login(email, password);
 
             if (user == null)
             {
                 ViewBag.Error = "Invalid email or password.";
-                return View();
-            }
-
-            // Kiểm tra mật khẩu
-            if (!VerifyPassword(password, user.PasswordSalt, user.PasswordHash))
-            {
-                ViewBag.ErrorLogin = "Wrong email or password.";
-                Console.WriteLine(ViewBag.ErrorLogin);
                 return View("Login");
             }
 
@@ -86,28 +76,6 @@ namespace PRN222_Final_Project.Controllers
 
             return RedirectToAction("Index", "Home");
         }
-
-        // Kiểm tra mật khẩu
-        private bool VerifyPassword(string password, byte[] storedSalt, byte[] storedHash)
-        {
-            using (var hmac = new HMACSHA512(storedSalt)) // Dùng lại storedSalt để tạo HMACSHA512
-            {
-                byte[] computedHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password)); // Tạo hash mới từ password nhập vào
-
-                // So sánh toàn bộ 64 byte
-                return computedHash.SequenceEqual(storedHash);
-            }
-        }
-
-        private void HashPassword(string password, out byte[] passwordSalt, out byte[] passwordHash)
-        {
-            using (var hmac = new HMACSHA512())
-            {
-                passwordSalt = hmac.Key; // Tạo salt (128 byte)
-                passwordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password)); // Băm ra 64 byte
-            }
-        }
-
 
         public async Task<IActionResult> Logout()
         {
@@ -127,17 +95,15 @@ namespace PRN222_Final_Project.Controllers
         public async Task<IActionResult> Register(string fullname, string email, string address, string phone, string password)
         {
             if (string.IsNullOrEmpty(fullname) || string.IsNullOrEmpty(email) || string.IsNullOrEmpty(address)
-        || string.IsNullOrEmpty(phone) || string.IsNullOrEmpty(password))
+            || string.IsNullOrEmpty(phone) || string.IsNullOrEmpty(password))
             {
                 ViewBag.Error = "Please fill all fields";
                 return View();
             }
 
-            // check user exit (tach service)
-            var users = await _userRepo.GetAllWithInclude(u => u.Carts, u => u.Orders);
-            var user = users.FirstOrDefault(u => string.Equals(u.Email.Trim(), email.Trim(), StringComparison.OrdinalIgnoreCase));
-
-            if (user != null)
+            // check user exit
+            bool userExits = await _userService.CheckUserExits(email);
+            if (userExits)
             {
                 ViewBag.Error = "Email has already been registered";
                 return View();
@@ -154,7 +120,7 @@ namespace PRN222_Final_Project.Controllers
             string verifyCode = new Random().Next(100000, 999999).ToString(); // Mã xác nhận 6 số
             string emailBody = $"Your verification code is: <b>{verifyCode}</b>";
 
-            bool emailSent = await emailService.SendEmailAsync(email, "Verify Your Account", emailBody);
+            bool emailSent = await _emailService.SendEmailAsync(email, "Verify Your Account", emailBody);
             if (!emailSent)
             {
                 Console.WriteLine("Bug Verify");
@@ -187,25 +153,7 @@ namespace PRN222_Final_Project.Controllers
             string phone = TempData["Phone"] as string;
             string password = TempData["Password"] as string;
 
-            // Mã hóa mật khẩu
-            byte[] passwordSalt, passwordHash;
-            HashPassword(password, out passwordSalt, out passwordHash);
-
-            // Tạo user mới
-            User newUser = new User
-            {
-                FullName = fullname,
-                Email = email,
-                Address = address,
-                PhoneNumber = phone,
-                RegistrationDate = DateTime.Now,
-                Role = "Customer",
-                PasswordSalt = passwordSalt,
-                PasswordHash = passwordHash
-            };
-
-            // Lưu user vào database
-            await _userRepo.Add(newUser);
+            var newUser = await _userService.Register(fullname, email, address, phone, password);
 
             return RedirectToAction("Login", "Common");
         }

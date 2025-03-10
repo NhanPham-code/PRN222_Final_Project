@@ -32,6 +32,9 @@ namespace PRN222_Final_Project
             // Inject Email Service
             builder.Services.AddScoped(typeof(EmailService));
 
+            // Inject User Service
+            builder.Services.AddScoped(typeof(UserService));
+
             builder.Services.AddDistributedMemoryCache();
             builder.Services.AddSession(options =>
             {
