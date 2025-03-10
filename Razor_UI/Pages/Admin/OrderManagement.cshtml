@@ -276,6 +276,22 @@
                     </tr>
                 </thead>
                 <tbody>
+                    @foreach(var order in Model.Orders)
+                    {
+                        <tr>
+                            <td>@order.OrderId</td>
+                            <td>@(order.User != null ? order.User.FullName : "N/A")</td>
+                            <td>@(order.OrderDate.HasValue ? order.OrderDate.Value.ToString("dd/MM/yyyy") : "N/A")</td>
+                            <td>@order.OrderStatus</td>
+                            <td>
+                                <a asp-page="EditOrder" asp-route-id="@order.OrderId" class="btn btn-warning">Sửa</a>
+                                <a asp-page="DeleteOrder" asp-route-id="@order.OrderId" class="btn btn-danger">Xóa</a>
+                            </td>
+                            <td style="text-align:right">@order.TotalAmount.ToString("N0") $</td>
+
+                        </tr>
+                    }
+                    @* @Model.order
                     <tr>
                         <td>ORD001</td>
                         <td>John Doe</td>
@@ -299,18 +315,19 @@
                         <td>2025-02-07</td>
                         <td><button class="view-btn">View</button></td>
                         <td>$50</td>
-                    </tr>
+                    </tr> *@
                 </tbody>
                 <tfoot>
                     <tr>
                         <td colspan="5" style="text-align: right;"><strong>Total Cancelled:</strong></td>
-                        <td id="cancelTotal"><strong>$50</strong></td>
+                        <td style="text-align:right"><strong>@ViewData["TotalDelivered"] $</strong></td>
                     </tr>
                     <tr>
                         <td colspan="5" style="text-align: right;"><strong>Total Orders:</strong></td>
-                        <td id="orderTotal"><strong>$350</strong></td>
+                        <td style="text-align:right"><strong>@ViewData["TotalProcessing"] $</strong></td>
                     </tr>
                 </tfoot>
+
             </table>
             <div id="pagination">
                 <button onclick="prevPage()">« Previous</button>
@@ -320,19 +337,12 @@
     </div>
 
     <script src="/js/AdminOrder.js"></script>
-    <script>
-        function loadHTML(elementId, url) {
-            fetch(url)
-                .then(response => response.text())
-                .then(data => {
-                    document.getElementById(elementId).innerHTML = data;
-                    const script = document.createElement('script');
-                    script.src = 'Admin-js/Navbars.js';
-                    document.body.appendChild(script);
-                });
-        }
 
-        loadHTML('navbars-placeholder', 'Navbars.html');
+    <script>
+        var js = jQuery.noConflict(true); //handle conflict of dataTable
+        js(document).ready(function () {
+
+        }
     </script>
 </body>
 </html>

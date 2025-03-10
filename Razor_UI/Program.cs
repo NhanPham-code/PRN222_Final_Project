@@ -1,3 +1,9 @@
+﻿using BLL.Interfaces;
+using BLL.Services;
+using DataAccess.DAOs;
+using DataAccess.Models;
+using Microsoft.EntityFrameworkCore;
+
 namespace Razor_UI
 {
     public class Program
@@ -8,6 +14,15 @@ namespace Razor_UI
 
             // Add services to the container.
             builder.Services.AddRazorPages();
+
+            builder.Services.AddDbContext<BakeryShopDbContext>(options =>
+                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+            // Inject Dao
+            builder.Services.AddScoped(typeof(ICrudDAO<,>), typeof(CrudDAO<,>));
+
+            // Inject Repo
+            builder.Services.AddScoped(typeof(ICrudRepo<,>), typeof(CrudRepo<,>));
 
             var app = builder.Build();
 
