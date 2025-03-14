@@ -4,6 +4,7 @@ using DataAccess.DAOs;
 using DataAccess.Models;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
+using PRN222_Final_Project.SignalRHub;
 
 namespace PRN222_Final_Project
 {
@@ -15,6 +16,9 @@ namespace PRN222_Final_Project
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+
+            // Inject SignalR
+            builder.Services.AddSignalR();
 
             // Inject DB
             builder.Services.AddDbContext<BakeryShopDbContext>(options =>
@@ -74,6 +78,8 @@ namespace PRN222_Final_Project
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
+
+            app.MapHub<DataSignalR>("/DataUpdate"); // SignalR - config hub endpoint
 
             app.Run();
         }

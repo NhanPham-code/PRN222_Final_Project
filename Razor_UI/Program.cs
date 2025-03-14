@@ -1,3 +1,10 @@
+using BLL.Interfaces;
+using BLL.Services;
+using DataAccess.DAOs;
+using DataAccess.Models;
+using Microsoft.EntityFrameworkCore;
+using Razor_UI.SignalRHub;
+
 namespace Razor_UI
 {
     public class Program
@@ -8,6 +15,19 @@ namespace Razor_UI
 
             // Add services to the container.
             builder.Services.AddRazorPages();
+
+            // Inject SignalR
+            builder.Services.AddSignalR();
+
+            // Inject DB
+            builder.Services.AddDbContext<BakeryShopDbContext>(options =>
+                           options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+            // Inject Dao
+            builder.Services.AddScoped(typeof(ICrudDAO<,>), typeof(CrudDAO<,>));
+
+            // Inject Repo
+            builder.Services.AddScoped(typeof(ICrudRepo<,>), typeof(CrudRepo<,>));
 
             var app = builder.Build();
 
@@ -27,6 +47,8 @@ namespace Razor_UI
             app.UseAuthorization();
 
             app.MapRazorPages();
+
+            app.MapHub<DataSignalR>("/DataUpdate"); // SignalR - config hub endpoint
 
             app.Run();
         }
