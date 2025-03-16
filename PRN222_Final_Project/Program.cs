@@ -26,6 +26,9 @@ namespace PRN222_Final_Project
             // Inject Repo
             builder.Services.AddScoped(typeof(ICrudRepo<,>), typeof(CrudRepo<,>));
 
+            //Inject Order Service
+            builder.Services.AddScoped(typeof(OrderService));
+
             // Inject Product Service
             builder.Services.AddScoped(typeof(ProductService));
 

@@ -1,9 +1,12 @@
-﻿@*
+﻿@using DataAccess.Models
+@*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 @{
     ViewData["Title"] = "Checkout";
 }
+
+@model Order;
 
 <head>
     <meta charset="utf-8" />
@@ -44,37 +47,184 @@
         </div>
     </div>
 
-    <h1 class="text-center fw-bold mb-4 mt-4" style="font-family: Arial, sans-serif;">Please enter your information</h1>
-
     <div class="container">
-        <form id="checkoutForm">
-            <div class="mb-3 mt-3 row">
-                <div class="col-6">
-                    <label for="name" class="form-label">Name:</label>
-                    <input type="text" class="form-control" id="name" required>
-                </div>
-                <div class="col-6">
-                    <label for="phone" class="form-label">Phone Number:</label>
-                    <input type="tel" class="form-control" id="phone" required>
-                </div>
-            </div>
+
+        <form id="checkoutForm" method="post" asp-controller="Orders" asp-action="CreateOrder">
+            <table id="cartTable" class="table table-striped">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Product</th>
+                        <th>Price</th>
+                        <th>Quantity</th>
+                        <th>Subtotal</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+                <tfoot>
+                    <tr class="total-row">
+                        <td colspan="3"></td>
+                        <td data-dt-column="3"><strong>Total:</strong></td>
+                        <td id="total">32,000 VND</td>
+                    </tr>
+                </tfoot>
+            </table>
+
+            <input type="hidden" name="orderData" id="orderData">
+
+            <h1 class="text-center fw-bold mb-4 mt-4" style="font-family: Arial, sans-serif;">Please enter your information</h1>
 
             <div class="mb-3">
                 <label for="address" class="form-label">Address:</label>
-                <textarea class="form-control" id="address" rows="3" required></textarea>
+                <textarea class="form-control" id="address" name="shipping_address" rows="3" required></textarea>
             </div>
-            <div class="mb-5">
-                <label for="note" class="form-label">Note:</label>
-                <textarea class="form-control" id="note" rows="3" required></textarea>
+
+            <div class="row">
+                <div class="col-12 text-right">
+                    <button id="orderBtn" class="btn-checkout">ORDER</button>
+                </div>
             </div>
         </form>
-
-        <div class="row">
-            <div class="col-12 text-right">
-                <button id="orderBtn" class="btn-checkout">ORDER</button>
-            </div>
-        </div>
     </div>
 
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.2.1/css/dataTables.dataTables.css" />
 
+    <script src="https://cdn.datatables.net/2.2.1/js/dataTables.js"></script>
+
+    @section Scripts {
+        <script>
+            var js = jQuery.noConflict(true); //handle conflict of dataTable
+            js(document).ready(function () {
+                let orderItem = [];
+                var cartData = [
+                    {
+                        image: '/img/PRODUCT/Special/Tiramisu.png',
+                        product: "Tiramisu",
+                        price: "25,000 $",
+                        quantity: null,
+                        subtotal: "25,000 $"
+                    },
+                    {
+                        image: '/img/PRODUCT/Bread/Croissant.png',
+                        product: "Crossaint",
+                        price: "32,000 $",
+                        quantity: null,
+                        subtotal: "32,000 $"
+                    },
+                    {
+                        image: '/img/PRODUCT/Sweet/Chocolate Donut.png',
+                        product: "Chocolate Donut",
+                        price: "35,000 $",
+                        quantity: null,
+                        subtotal: "35,000 $"
+                    }
+                ];
+
+                // Initialize DataTable
+                const table = $('#cartTable').DataTable({
+                    paging: false,
+                    searching: false,
+                    info: false,
+                    ordering: false,
+                    data: cartData,
+                    columns: [
+                        {
+                            title: "",
+                            data: "image",
+                            className: "align-middle product-image",
+                            render: function (data) {
+                                return `<img src="${data}" class="product-image">`;
+                            }
+                        },
+                        { title: "Product", data: "product", className: "align-middle" },
+                        { title: "Price", data: "price", className: "align-middle price" },
+                        { title: "Quantity", data: "quantity", className: "align-middle" },
+                        { title: "Subtotal", data: "subtotal", className: "align-middle subtotal" }
+                    ],
+                    createdRow: function (row) {
+                        var quantityCell = $('td:eq(3)', row);
+                        quantityCell.html(
+                            `<div class="quantity-control">
+                                <button class="quantity-btn decrease">-</button>
+                                <input type="text" class="quantity-input" value="1" readonly>
+                                <button class="quantity-btn increase">+</button>
+                             </div>`
+                        );
+                    }
+                });
+
+                function calculateTotal() {
+                    let total = 0;
+                    $('#cartTable tbody tr').each(function () {
+                        let subtotalText = $(this).find('.subtotal').text().replace(/\D/g, "");
+                        let subtotalValue = parseInt(subtotalText) || 0;
+                        total += subtotalValue;
+                    });
+
+                    $('#total').text(total.toLocaleString('en-US') + ' $');
+                }
+
+                function updateSubtotal(input) {
+                    let $input = $(input);
+                    let row = $input.closest("tr");
+                    let priceText = row.find(".price").text().replace(/\D/g, "");
+                    let price = parseInt(priceText) || 0;
+                    let quantity = parseInt($input.val()) || 1;
+
+                    let subtotal = price * quantity;
+                    row.find(".subtotal").text(subtotal.toLocaleString("en-US") + " $");
+
+                    calculateTotal();
+                }
+
+                // Xử lý tăng số lượng
+                $(document).on("click", ".increase", function () {
+                    let input = $(this).siblings(".quantity-input");
+                    let newValue = parseInt(input.val()) + 1;
+                    input.val(newValue);
+                    updateSubtotal(input);
+                });
+
+                // Xử lý giảm số lượng
+                $(document).on("click", ".decrease", function () {
+                    let input = $(this).siblings(".quantity-input");
+                    let newValue = parseInt(input.val()) - 1;
+                    if (newValue < 1) return;
+                    input.val(newValue);
+                    updateSubtotal(input);
+                });
+
+                calculateTotal();
+
+                $("#orderBtn").click(function () {
+
+                    $("#cartTable tbody tr").each(function () {
+                        let product = $(this).find("td:eq(1)").text().trim();
+                        let price = $(this).find("td:eq(2)").text().replace(/\D/g, "");
+                        let quantity = $(this).find("td:eq(3) input").val();
+                        let subtotal = $(this).find("td:eq(4)").text().replace(/\D/g, "");
+
+                        orderItem.push({
+                            product: product,
+                            price: parseInt(price),
+                            quantity: parseInt(quantity),
+                            subtotal: parseInt(subtotal)
+                        });
+                    });
+
+                    let totalValue = $("#total").text().replace(/\D/g, "");
+
+                    let orderData = {
+                        items: orderItem,
+                        total: parseInt(totalValue)
+                    }
+
+                    $("#orderData").val(JSON.stringify(orderData));
+
+                    $("#checkoutForm").submit();
+                });
+            });
+        </script>
+    }
 </body>
