@@ -8,6 +8,8 @@
 
   <ItemGroup>
     <PackageReference Include="MailKit" Version="4.10.0" />
+    <PackageReference Include="Microsoft.AspNetCore.SignalR" Version="1.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="9.0.3" />
   </ItemGroup>
 
   <ItemGroup>
