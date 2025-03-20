@@ -1,4 +1,5 @@
 ﻿// Please see documentation at https://learn.microsoft.com/aspnet/core/client-side/bundling-and-minification
+// Please see documentation at https://learn.microsoft.com/aspnet/core/client-side/bundling-and-minification
 // for details on configuring this project to bundle and minify static web assets.
 
 // Write your JavaScript code.
@@ -8,6 +9,21 @@ var connection = new signalR.HubConnectionBuilder()
 
 // giong "load" ben edit khi goi signalR update
 // khi goi signalR update thi se goi den ham nay va truyen duong dan de "load"" lai trang
+
+connection.on("feedback", function () {
+    //location.reload(); // Tải lại trang để cập nhật dữ liệu
+    location.href = '/Admin/FeedbackManagement'
+
+connection.on("loadCateGory", function () {
+    //location.reload(); // Tải lại trang để cập nhật dữ liệu
+    location.href = '/Admin/CateGoryManagement'
+
+connection.on("loadProduct", function () {
+    //location.reload(); // Tải lại trang để cập nhật dữ liệu
+    location.href = '/Admin/ProductManagement'
+
+
+});
 
 connection.start().catch(function (err) {
     return console.error(err.toString());
@@ -45,23 +61,23 @@ $('.payment-status').change(function () {
     });
 });
 
-$('.order-status').change(function () {
-    const orderId = $(this).data('order-id');
-    const orderStatus = $(this).val();
+    $('.order-status').change(function () {
+        const orderId = $(this).data('order-id');
+        const orderStatus = $(this).val();
 
-    $.ajax({
-        url: window.location.pathname,
-        type: 'POST',
-        data: {
-            OrderId: orderId,
-            OrderStatus: orderStatus,
-            __RequestVerificationToken: $('input[name="__RequestVerificationToken"]').val()
-        },
-        success: function (result) {
-            console.log("Order status updated successfully");
-        },
-        error: function (error) {
-            console.error("Error updating order status:", error);
-        }
+        $.ajax({
+            url: window.location.pathname,
+            type: 'POST',
+            data: {
+                OrderId: orderId,
+                OrderStatus: orderStatus,
+                __RequestVerificationToken: $('input[name="__RequestVerificationToken"]').val()
+            },
+            success: function (result) {
+                console.log("Order status updated successfully");
+            },
+            error: function (error) {
+                console.error("Error updating order status:", error);
+            }
+        });
     });
-});

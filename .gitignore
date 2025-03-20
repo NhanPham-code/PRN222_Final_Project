@@ -403,3 +403,9 @@ FodyWeavers.xsd
 *.sln.iml
 .vs/
 appsettings.json
+<<<<<<< HEAD
+=======
+appsettings.Development.json
+>>>>>>> 5814258859004000b91f749b7f6be2b61061697f
+/PRN222_Final_Project/appsettings.Development.json
+/Razor_UI/appsettings.Development.json

@@ -273,7 +273,7 @@
         /* Nội dung modal */
         .modal-content {
             background: white;
-            width: 350px;
+            width: 400px;
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
@@ -322,36 +322,117 @@
             .btn-save:hover {
                 background: #218838;
             }
+        /* Nút SAVE */
+        .btn-save {
+            background-color: #28a745; /* Màu xanh lá */
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px; /* Bo góc nhẹ */
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+            .btn-save:hover {
+                background-color: #218838; /* Màu xanh đậm hơn khi hover */
+                transform: scale(1.05);
+            }
+
+        /* Nút UPDATE */
+        .btn-update {
+            background-color: #007bff; /* Màu xanh dương */
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+            .btn-update:hover {
+                background-color: #0056b3; /* Màu xanh đậm hơn khi hover */
+                transform: scale(1.05);
+            }
+
+        /* Ẩn nút UPDATE mặc định */
+        #updateCategoryBtn {
+            display: none;
+        }
 
     </style>
 </head>
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger fade-out">@TempData["ErrorMessage"]</div>
+}
+
+@if (TempData["WarningMessage"] != null)
+{
+    <div class="alert alert-warning fade-out">
+        @TempData["WarningMessage"]
+        <br />
+
+        <!-- Chỉ hiển thị nút Delete nếu có thể xóa -->
+        @if (TempData["CanDelete"] != null && (bool)TempData["CanDelete"])
+        {
+            <form method="post" asp-page-handler="DeleteConfirmed">
+                <input type="hidden" name="id" value="@TempData["CategoryIdToDelete"]" />
+                <button type="submit" class="btn btn-danger">Yes, Delete</button>
+            </form>
+        }
+
+        <!-- Nút Cancel vẫn luôn hiển thị -->
+        <a href="javascript:history.back()" class="btn btn-secondary">Cancel</a>
+    </div>
+}
+
+
 <body>
     <div class="main-content">
         <div class="container">
-            <div class="search-bar-pro">
-                <input type="text" class="search-input " placeholder="Search for category...">
-                <select id="filterCategory">
-                    <option value="">All Categories</option>
-                </select>
-            </div>
+            
+            <form method="get">
+                <div class="search-bar-pro">
+                    <input type="text" name="search" class="search-input" placeholder="Search for category..." value="@Request.Query["search"]">
+                    <select name="category">
+                        <option value="">All Categories</option>
+                        @foreach (var cat in Model.Categories.Select(c => c.CategoryName).Distinct())
+                        {
+                            <option value="@cat" selected="@(Request.Query["category"] == cat ? "selected" : null)">@cat</option>
+                        }
+                    </select>
+                    <button type="submit">Filter</button>
+                </div>
+            </form>
+
             <div class="action-buttons">
                 <button class="add-btn" id="add-category-btn">Add Category</button>
             </div>
             <table>
                 <thead>
                     <tr>
-                        <th>Category</th>
+                        <th>Category ID</th>
+                        <th>Category Name</th>
+                        <th>Description</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
-                <tbody id="category-table-body">
-                    @for (int i = 0; i < 5; i++)
+                <tbody>
+                    @foreach (var category in Model.Categories)
                     {
                         <tr>
-                            <td>Bread</td>
+                            <td>@category.CategoryId</td>
+                            <td>@category.CategoryName</td>
+                            <td>@category.Description</td>
                             <td>
-                                <button class="edit-btn" onclick="openEditModal(@i, '/img/PRODUCT/Bread/Golden Lava Bun.png', 'Golden', 'Bread', 12)">Update</button>
-                                <button class="delete-btn" onclick="deleteProduct()">Delete</button>
+                                <button class="edit-btn" onclick="openEditModal('@category.CategoryId', '@category.CategoryName', '@category.Description')">Update</button>
+                                <form method="post" asp-page-handler="Delete" asp-route-id="@category.CategoryId"
+                                      style="display:inline;" onsubmit="return confirmDelete(event)">
+                                    <button type="submit" class="delete-btn">Delete</button>
+                                </form>
+
                             </td>
                         </tr>
                     }
@@ -359,28 +440,87 @@
             </table>
         </div>
     </div>
-    <!-- Popup Modal -->
-    <div id="addCategoryModal" class="modal">
+
+    <!-- Add/Edit Category Modal -->
+    <div id="categoryModal" class="modal">
         <div class="modal-content">
-            <h2>Add Category</h2>
-            <label>Category Name:</label>
-            <input type="text" id="newCategoryInput" placeholder="Enter category name">
-            <button class="btn-save" id="saveCategoryBtn">SAVE</button>
+            <h2 id="modalTitle">Add Category</h2>
+            <form method="post">
+                
+                <input type="hidden" id="CategoryId" asp-for="Category.CategoryId">
+
+                <label>Category Name:</label>
+                <input type="text" id="CategoryName" asp-for="Category.CategoryName" placeholder="Enter category name" required>
+
+                <label>Description:</label>
+                <input type="text" id="CategoryDescription" asp-for="Category.Description" placeholder="Enter description" required>
+
+                <button type="submit" class="btn-save" id="saveCategoryBtn" asp-page-handler="Create">SAVE</button>
+                <button type="submit" class="btn-update" id="updateCategoryBtn" asp-page-handler="Update" style="display:none;">UPDATE</button>
+            </form>
         </div>
     </div>
+
     <script>
-        document.getElementById("add-category-btn").addEventListener("click", function () {
-            let modal = document.getElementById("addCategoryModal");
-            modal.style.display = "flex"; // Hiển thị popup
+                document.getElementById("add-category-btn").addEventListener("click", function () {
+            document.getElementById("modalTitle").innerText = "Add Category";
+
+            // Kiểm tra trước khi remove tránh lỗi
+            let categoryIdInput = document.getElementById("CategoryId");
+            if (categoryIdInput) {
+                categoryIdInput.remove();
+            }
+
+            document.getElementById("CategoryName").value = "";
+            document.getElementById("CategoryDescription").value = "";
+
+            document.getElementById("saveCategoryBtn").style.display = "block";
+            document.getElementById("updateCategoryBtn").style.display = "none";
+
+            document.getElementById("categoryModal").style.display = "flex";
         });
 
+        function openEditModal(id, name, description) {
+            document.getElementById("modalTitle").innerText = "Update Category";
+
+            let categoryForm = document.querySelector("form");
+
+            // Kiểm tra nếu input ẩn chưa tồn tại thì tạo mới
+            let categoryIdInput = document.getElementById("CategoryId");
+            if (!categoryIdInput) {
+                categoryIdInput = document.createElement("input");
+                categoryIdInput.type = "hidden";
+                categoryIdInput.id = "CategoryId";
+                categoryIdInput.name = "Category.CategoryId";
+                categoryForm.prepend(categoryIdInput);
+            }
+
+            categoryIdInput.value = id;
+            document.getElementById("CategoryName").value = name;
+            document.getElementById("CategoryDescription").value = description;
+
+            document.getElementById("saveCategoryBtn").style.display = "none";
+            document.getElementById("updateCategoryBtn").style.display = "block";
+
+            document.getElementById("categoryModal").style.display = "flex";
+        }
+
         window.onclick = function (event) {
-            let modal = document.getElementById("addCategoryModal");
+            let modal = document.getElementById("categoryModal");
             if (event.target === modal) {
-                modal.style.display = "none"; // Ẩn khi click ra ngoài
+                modal.style.display = "none";
             }
         };
 
     </script>
+    
+
+    
+
+    
+
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/7.0.5/signalr.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
 </body>
 </html>
