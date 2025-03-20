@@ -39,6 +39,9 @@ namespace PRN222_Final_Project
             // Inject User Service
             builder.Services.AddScoped(typeof(UserService));
 
+            // Inject Cart Service
+            builder.Services.AddScoped(typeof(CartService));
+
             builder.Services.AddDistributedMemoryCache();
             builder.Services.AddSession(options =>
             {
