@@ -6,194 +6,315 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Contact - Caky Word</title>
-	<!-- Bootstrap CSS -->
-	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-	<!-- Link GG Font -->
-	<link rel="preconnect" href="https://fonts.googleapis.com">
-	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-	<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
-	<style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact - Caky Word</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <!-- Link GG Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
+    <style>
 
-		html, body {
-			height: 100%;
-			width: 100%;
-			overflow-x: hidden; /* Ngăn chặn scroll ngang */
-		}
+        html, body {
+            height: 100%;
+            width: 100%;
+            overflow-x: hidden; /* Ngăn chặn scroll ngang */
+        }
 
-		.hero {
-			background-image: url('/img/PRODUCT/Background/Bakery.jpg'); /* Thay URL ảnh nền */
-			background-size: cover;
-			background-position: center;
-			background-repeat: no-repeat;
-			height: 300px;
-			display: flex;
-			flex-direction: column;
-			align-items: center;
-			justify-content: center;
-			padding: 1rem 0;
-		}
+        .hero {
+            background-image: url('/img/PRODUCT/Background/Bakery.jpg'); /* Thay URL ảnh nền */
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            height: 300px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem 0;
+        }
 
-		.header-cart {
-			font-size: 2rem;
-			color: white;
-			margin-bottom: 0.5rem; /* Khoảng cách giữa HOME và breadcrumb */
-			text-transform: uppercase;
-		}
+        .header-cart {
+            font-size: 2rem;
+            color: white;
+            margin-bottom: 0.5rem; /* Khoảng cách giữa HOME và breadcrumb */
+            text-transform: uppercase;
+        }
 
-		.breadcrumb {
-			font-size: 1rem;
-			color: white;
-		}
+        .breadcrumb {
+            font-size: 1rem;
+            color: white;
+        }
 
-			.breadcrumb a {
-				color: white;
-				text-decoration: none;
-				transition: color 0.3s ease;
-			}
+            .breadcrumb a {
+                color: white;
+                text-decoration: none;
+                transition: color 0.3s ease;
+            }
 
-				.breadcrumb a:hover {
-					color: #f7811b; /* Màu cam khi hover */
-				}
+                .breadcrumb a:hover {
+                    color: #f7811b; /* Màu cam khi hover */
+                }
 
-		.breadcrumb-item + .breadcrumb-item::before {
-			content: "/";
-			color: white; /* Dấu "/" màu trắng */
-			padding: -1px 0.5rem;
-		}
+        .breadcrumb-item + .breadcrumb-item::before {
+            content: "/";
+            color: white; /* Dấu "/" màu trắng */
+            padding: -1px 0.5rem;
+        }
 
-		.breadcrumb-item.active {
-			color: white; /* Màu trắng cho Product */
-		}
+        .breadcrumb-item.active {
+            color: white; /* Màu trắng cho Product */
+        }
 
-		.story {
-			color: #453426;
-			margin-left: auto;
-			margin-right: auto;
-			text-align: center;
-			max-width: 80%; /* Giới hạn chiều rộng để không bị tràn */
-		}
+        .story {
+            color: #453426;
+            margin-left: auto;
+            margin-right: auto;
+            text-align: center;
+            max-width: 80%; /* Giới hạn chiều rộng để không bị tràn */
+        }
 
-			.story .text {
-				text-align: left; /* Căn trái nội dung text */
-				margin: 0 auto; /* Căn giữa */
-			}
+            .story .text {
+                text-align: left; /* Căn trái nội dung text */
+                margin: 0 auto; /* Căn giữa */
+            }
 
-			.story .image {
-				display: flex;
-				justify-content: center; /* Căn giữa hình ảnh */
-				align-items: center;
-			}
+            .story .image {
+                display: flex;
+                justify-content: center; /* Căn giữa hình ảnh */
+                align-items: center;
+            }
 
-				.story .image img {
-					max-width: 100%;
-					height: auto;
-				}
+                .story .image img {
+                    max-width: 100%;
+                    height: auto;
+                }
 
-		.great-vibes-regular {
-			font-family: "Great Vibes", serif;
-			font-weight: 400;
-			font-style: normal;
-			font-size: 2.5rem; /* Điều chỉnh kích thước nếu cần */
-		}
-		.contact-form {
-			margin-left:10%;
-			margin-right:10%;
-		}
+        .great-vibes-regular {
+            font-family: "Great Vibes", serif;
+            font-weight: 400;
+            font-style: normal;
+            font-size: 2.5rem; /* Điều chỉnh kích thước nếu cần */
+        }
 
-			.contact-form button {
-				background-color: #b37321; /* Màu nền cam */
-				color: white; /* Màu chữ trắng */
-				border: none; /* Bỏ viền */
-				padding: 10px 20px; /* Khoảng cách trong nút */
-				font-size: 16px; /* Kích thước chữ */
-				border-radius: 5px; /* Bo góc cho nút */
-				cursor: pointer; /* Hiển thị con trỏ tay khi hover */
-				display: block; /* Chuyển nút thành block để có thể canh giữa */
-				margin: 20px auto; /* Canh giữa nút */
-				text-align: center; /* Canh giữa nội dung chữ */
-				width: 200px; /* Chiều rộng nút */
-			}
+        .contact-section {
+            background-color: #FCF8F0; /* Nền nhẹ màu be */
+            padding-top: 3%;
+            margin-top: 2%;
+        }
 
-				.contact-form button:hover {
-					background-color: #321b0d; /* Màu cam đậm khi hover */
-				}
-	</style>
+        .contact-title {
+            font-size: 28px;
+            font-weight: bold;
+            color: #f7811b;
+        }
+
+        .contact-text {
+            font-size: 16px;
+            color: #453426;
+            margin-bottom: 20px;
+        }
+
+        .contact-info p {
+            font-size: 16px;
+            color: #453426;
+            margin-bottom: 10px;
+        }
+
+        .contact-image {
+            max-width: 80%;
+            border-radius: 10px;
+        }
+
+        .contact-form {
+            margin-left: 10%;
+            margin-right: 10%;
+            margin-top: 2%;
+        }
+
+            .contact-form button {
+                background-color: #b37321; /* Màu nền cam */
+                color: white; /* Màu chữ trắng */
+                border: none; /* Bỏ viền */
+                padding: 10px 20px; /* Khoảng cách trong nút */
+                font-size: 16px; /* Kích thước chữ */
+                border-radius: 5px; /* Bo góc cho nút */
+                cursor: pointer; /* Hiển thị con trỏ tay khi hover */
+                display: block; /* Chuyển nút thành block để có thể canh giữa */
+                margin: 20px auto; /* Canh giữa nút */
+                text-align: center; /* Canh giữa nội dung chữ */
+                width: 200px; /* Chiều rộng nút */
+            }
+
+                .contact-form button:hover {
+                    background-color: #321b0d; /* Màu cam đậm khi hover */
+                }
+
+        .carousel-controls {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px; /* Điều chỉnh vị trí */
+        }
+
+        .carousel-control-prev, .carousel-control-next {
+            width: 50px;
+            height: 50px;
+            background-color: #d4a373;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: none;
+            cursor: pointer;
+            transition: background 0.3s ease, transform 0.2s ease;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+            .carousel-control-prev:hover, .carousel-control-next:hover {
+                background-color: #b37321;
+                transform: scale(1.1);
+            }
+
+            .carousel-control-prev svg, .carousel-control-next svg {
+                width: 24px;
+                height: 24px;
+                stroke: white;
+            }
+    </style>
 </head>
 <body>
 
 
-	<!-- Hero Section -->
-	<section class="hero">
-		<h1 class="header-cart text-center">
-			CONTACT
-		</h1>
-		<div class="breadcrumb-container d-flex text-center">
-			<nav aria-label="breadcrumb">
-				<ol class="breadcrumb mb-0">
-					<li class="breadcrumb-item">
-						<a class="nav-link @(ViewContext.RouteData.Values["action"].ToString() == "Index" && ViewContext.RouteData.Values["controller"].ToString() == "Home" ? "active" : "")"
-						   asp-controller="Home" asp-action="Index">Home</a>
-					</li>
-					<li class="breadcrumb-item active" aria-current="page">Contact</li>
-				</ol>
-			</nav>
-		</div>
-	</section>
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1 class="header-cart text-center">
+            CONTACT
+        </h1>
+        <div class="breadcrumb-container d-flex text-center">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-0">
+                    <li class="breadcrumb-item">
+                        <a class="nav-link @(ViewContext.RouteData.Values["action"].ToString() == "Index" && ViewContext.RouteData.Values["controller"].ToString() == "Home" ? "active" : "")"
+                           asp-controller="Home" asp-action="Index">Home</a>
+                    </li>
+                    <li class="breadcrumb-item active" aria-current="page">Contact</li>
+                </ol>
+            </nav>
+        </div>
+    </section>
 
-	<section class="story row justify-content-center ms-5 me-5 mt-5">
-		<div class="text col-md-6">
-			<h2 class="great-vibes-regular">Story of</h2> <!-- Áp dụng font cho "Story of" -->
-			<h2> CAKY WORD</h2>
-			<p class="my-4">Experience amazing bread cuisine at Caky Word!</p>
-			<p class="lh-sm">"We are confident of leading with prestige and quality,"</p>
-			<p class="lh-sm">"We understand Vietnamese cuisine and taste,"</p>
-			<p class="lh-sm">"We are constantly innovating and creating."</p>
-			<p class="my-4">Experience amazing bakery cuisine at the bread brand today!</p>
-		</div>
+    <section class="story row justify-content-center ms-5 me-5 mt-5">
+        <div class="text col-md-6">
+            <h2 class="great-vibes-regular">Story of</h2> <!-- Áp dụng font cho "Story of" -->
+            <h2> CAKY WORD</h2>
+            <p class="my-4">Experience amazing bread cuisine at Caky Word!</p>
+            <p class="lh-sm">"We are confident of leading with prestige and quality,"</p>
+            <p class="lh-sm">"We understand Vietnamese cuisine and taste,"</p>
+            <p class="lh-sm">"We are constantly innovating and creating."</p>
+            <p class="my-4">Experience amazing bakery cuisine at the bread brand today!</p>
+        </div>
 
-		<div class="image col-md-4">
-			<img src="/img/CONTACT/US/Cake.jpg" alt="Caky Word Cake" class="img-fluid"> <!-- Thay URL ảnh nếu cần -->
-		</div>
-	</section>
+        <div class="image col-md-4">
+            <img src="/img/CONTACT/US/Cake.jpg" alt="Caky Word Cake" class="img-fluid"> <!-- Thay URL ảnh nếu cần -->
+        </div>
 
-	<div class="contact-form">
-		<h3>CONTACT</h3>
-		<form>
-			<div class="row mb-3">
-				<div class="col-md-6">
-					<label for="fullname">Fullname</label>
-					<input type="text" id="fullname" class="form-control" required>
-					<label for="email">Email address</label>
-					<input type="email" id="email" class="form-control" required>
-					<label for="phone">Phone number</label>
-					<input type="tel" id="phone" class="form-control">
-				</div>
-				<div class="col-md-6">
-					<label for="suggestion">Your suggestion</label>
-					<textarea id="suggestion" class="form-control" rows="6"></textarea>
-				</div>
-			</div>
+    </section>
 
-			<button type="submit">Submit</button>
-		</form>
-	</div>
+    <section class="contact-section d-flex align-items-center justify-content-center">
+        <div class="container">
+            <div class="row align-items-center">
+                <!-- Hình ảnh bên trái -->
+                <div class="col-md-5 text-center">
+                    <img src="/img/CONTACT/Contact.png" alt="Customer Support" class="img-fluid contact-image">
+                </div>
+
+                <!-- Nội dung bên phải -->
+                <div class="col-md-7">
+                    <h2 class="contact-title">Customer Reviews</h2>
+                    <!-- Phản hồi của khách hàng -->
+                    <!-- Phản hồi của khách hàng -->
+                    @if (Model != null)
+                    {
+                        <div id="feedbackCarousel" class="carousel slide" data-bs-ride="carousel">
+                            <div class="carousel-inner text-center">
+                                @{
+                                    int count = 0;
+                                }
+                                @foreach (var feedback in Model)
+                                {
+                                    <div class="carousel-item @(count == 0 ? "active" : "")">
+                                        <div class="customer-feedback text-center p-4">
+                                            <p class="fst-italic" style="font-size: 18px;">
+                                                "@feedback.Description"
+                                            </p>
+                                            <p class="fw-bold text-end">- Beloved Customer -</p>
+                                        </div>
+                                    </div>
+                                    count++;
+                                }
+                            </div>
+
+                            <!-- Thêm div bọc nút điều hướng để căn giữa -->
+                            <div class="d-flex justify-content-center mt-3">
+                                <button class="carousel-control-prev">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M15 18L9 12L15 6" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                    </svg>
+                                </button>
+
+                                <button class="carousel-control-next">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M9 18L15 12L9 6" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <p class="text-muted text-center">No feedback available yet.</p>
+                    }
+                </div>
+            </div>
+        </div>
+    </section>
+    <div class="contact-form">
+        <h3>CONTACT</h3>
+        <form asp-action="SubmitFeedback" asp-controller="Contact" method="post">
+            <div class="row mb-3">
+                <p class="contact-text">
+                    We are always ready to listen and support you. If you have any questions, requests, or feedback,
+                    do not hesitate to contact us!
+                </p>
+                <div class="col-md-12">
+                    <h3 for="description" style="font-size: 30px">FEEDBACK HERE!</h3>
+                    <textarea id="description" name="suggestion" class="form-control" style="border: 2px solid #000; " rows="6">
+                        @(ViewBag.CustomerFeedback != null ? ViewBag.CustomerFeedback.Description : "")
+                </textarea>
+                </div>
+            </div>
+            <button type="submit">Feedback</button>
+        </form>
+    </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+             const carousel = document.querySelector("#feedbackCarousel");
+             const prevButton = document.querySelector(".carousel-control-prev");
+             const nextButton = document.querySelector(".carousel-control-next");
+
+             if (carousel) {
+                 prevButton.addEventListener("click", function () {
+                     new bootstrap.Carousel(carousel).prev();
+                 });
+
+                 nextButton.addEventListener("click", function () {
+                     new bootstrap.Carousel(carousel).next();
+                 });
+             }
+         });
+    </script>
 </body>
-<script>
-	document.addEventListener("DOMContentLoaded", function () {
-			const storySection = document.querySelector(".story");
-
-			const observer = new IntersectionObserver(entries => {
-				entries.forEach(entry => {
-					if (entry.isIntersecting) {
-						storySection.classList.add("show");
-					}
-				});
-			}, { threshold: 0.5 });
-
-			observer.observe(storySection);
-		});
-</script>
 </html>
