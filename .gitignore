@@ -401,3 +401,4 @@ FodyWeavers.xsd
 .vs/
 appsettings.json
 appsettings.Development.json
+/PRN222_Final_Project/appsettings.Development.json
