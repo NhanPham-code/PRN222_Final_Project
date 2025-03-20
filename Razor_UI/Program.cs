@@ -15,9 +15,13 @@ namespace Razor_UI
 
             // Add services to the container.
             builder.Services.AddRazorPages();
+                
+            // Inject SignalR
+            builder.Services.AddSignalR();
 
+            // Inject DB
             builder.Services.AddDbContext<BakeryShopDbContext>(options =>
-                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+                           options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
             // Inject Dao
             builder.Services.AddScoped(typeof(ICrudDAO<,>), typeof(CrudDAO<,>));
@@ -39,6 +43,7 @@ namespace Razor_UI
             app.UseStaticFiles();
 
             app.UseRouting();
+
 
             app.UseAuthorization();
 

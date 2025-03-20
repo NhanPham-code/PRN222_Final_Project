@@ -1,7 +1,9 @@
 ﻿@page
 @model Razor_UI.Pages.Admin.OrderManagementModel
 @{
+    Layout = "~/Pages/Shared/_Layout.cshtml";
 }
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -244,7 +246,7 @@
     </style>
 </head>
 <body>
-    
+
     <!-- Main Content -->
     <div class="main-content">
         <div class="container">
@@ -264,85 +266,62 @@
                 </div>
             </div>
 
-            <table id="orderTable">
-                <thead>
-                    <tr>
-                        <th class="name-column">ID</th>
-                        <th class="name-column">Name</th>
-                        <th class="name-column">Status</th>
-                        <th class="name-column">Purchase Date</th>
-                        <th class="name-column">Actions</th>
-                        <th class="name-column">Total Price</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach(var order in Model.Orders)
-                    {
+            <form method="post" id="orderForm">
+                @Html.AntiForgeryToken()
+                <table id="orderTable">
+                    <thead>
                         <tr>
-                            <td>@order.OrderId</td>
-                            <td>@(order.User != null ? order.User.FullName : "N/A")</td>
-                            <td>@(order.OrderDate.HasValue ? order.OrderDate.Value.ToString("dd/MM/yyyy") : "N/A")</td>
-                            <td>@order.OrderStatus</td>
-                            <td>
-                                <a asp-page="EditOrder" asp-route-id="@order.OrderId" class="btn btn-warning">Sửa</a>
-                                <a asp-page="DeleteOrder" asp-route-id="@order.OrderId" class="btn btn-danger">Xóa</a>
-                            </td>
-                            <td style="text-align:right">@order.TotalAmount.ToString("N0") $</td>
-
+                            <th>Order ID</th>
+                            <th>Name</th>
+                            <th>Order Date</th>
+                            <th>Shipping Address</th>
+                            <th>Order Status</th>
+                            <th>Payment Method</th>
+                            <th>Payment Status</th>
+                            <th>Total Price</th>
                         </tr>
-                    }
-                    @* @Model.order
-                    <tr>
-                        <td>ORD001</td>
-                        <td>John Doe</td>
-                        <td>New Order</td>
-                        <td>2025-02-09</td>
-                        <td><button class="view-btn">View</button></td>
-                        <td>$100</td>
-                    </tr>
-                    <tr>
-                        <td>ORD002</td>
-                        <td>Jane Smith</td>
-                        <td>Completed</td>
-                        <td>2025-02-08</td>
-                        <td><button class ="view-btn">View</button></td>
-                        <td>$250</td>
-                    </tr>
-                    <tr>
-                        <td>ORD003</td>
-                        <td>Michael Johnson</td>
-                        <td>Cancelled</td>
-                        <td>2025-02-07</td>
-                        <td><button class="view-btn">View</button></td>
-                        <td>$50</td>
-                    </tr> *@
-                </tbody>
-                <tfoot>
-                    <tr>
-                        <td colspan="5" style="text-align: right;"><strong>Total Cancelled:</strong></td>
-                        <td style="text-align:right"><strong>@ViewData["TotalDelivered"] $</strong></td>
-                    </tr>
-                    <tr>
-                        <td colspan="5" style="text-align: right;"><strong>Total Orders:</strong></td>
-                        <td style="text-align:right"><strong>@ViewData["TotalProcessing"] $</strong></td>
-                    </tr>
-                </tfoot>
+                    </thead>
+                    <tbody>
+                        @foreach (var order in Model.Orders)
+                        {
+                            <tr>
+                                <td>@order.OrderId</td>
+                                <td>@(order.User != null ? order.User.FullName : "N/A")</td>
+                                <td>@(order.OrderDate.HasValue ? order.OrderDate.Value.ToString("dd/MM/yyyy") : "N/A")</td>
+                                <td>@order.ShippingAddress</td>
+                                <td>
+                                    <div class="form-group">
+                                        <select class="form-control order-status" data-order-id="@order.OrderId">
+                                            <option value="Pending" selected="@(order.OrderStatus == "Pending" ? "selected" : null)">Pending</option>
+                                            <option value="Processing" selected="@(order.OrderStatus == "Processing" ? "selected" : null)">Processing</option>
+                                            <option value="Shipped" selected="@(order.OrderStatus == "Shipped" ? "selected" : null)">Shipped</option>
+                                            <option value="Delivered" selected="@(order.OrderStatus == "Delivered" ? "selected" : null)">Delivered</option>
+                                        </select>
 
-            </table>
+                                    </div>
+                                </td>
+                                <td>@order.PaymentMethod</td>
+                                <td>
+                                    <div class="form-group">
+                                        <select class="form-control payment-status" data-order-id="@order.OrderId">
+                                            <option value="Pending" selected="@(order.PaymentStatus == "Pending" ? "selected" : null)">Pending</option>
+                                            <option value="Paid" selected="@(order.PaymentStatus == "Paid" ? "selected" : null)">Paid</option>
+                                        </select>
+                                    </div>
+                                </td>
+                                <td style="text-align:right">@order.TotalAmount.ToString("N0") $</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </form>
+
             <div id="pagination">
-                <button onclick="prevPage()">« Previous</button>
+                <button onclick="newFunction();">« Previous</button>
                 <button onclick="nextPage()">Next »</button>
             </div>
         </div>
     </div>
 
-    <script src="/js/AdminOrder.js"></script>
-
-    <script>
-        var js = jQuery.noConflict(true); //handle conflict of dataTable
-        js(document).ready(function () {
-
-        }
-    </script>
 </body>
 </html>

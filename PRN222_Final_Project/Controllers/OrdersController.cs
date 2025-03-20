@@ -16,13 +16,18 @@ namespace PRN222_Final_Project.Controllers
     {
         private ICrudRepo<Order, int> _orderRepo;
         private OrderService _orderService;
+        private ICrudRepo<User, int> _userRepo;
+        private UserService _userSerivce;
         private readonly ILogger<OrdersController> _logger;
 
-        public OrdersController(ICrudRepo<Order, int> orderRepo, OrderService orderService, ILogger<OrdersController> logger)
+        public OrdersController(ICrudRepo<Order, int> orderRepo, OrderService orderService, 
+            ILogger<OrdersController> logger, UserService userService, ICrudRepo<User, int> userRepo)
         {
             _orderRepo = orderRepo;
             _orderService = orderService;
             _logger = logger;
+            _userSerivce = userService;
+            _userRepo = userRepo;
         }
 
         // GET: Orders
