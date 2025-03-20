@@ -13,9 +13,15 @@ connection.on("load", function () {
     //location.reload(); // Tải lại trang để cập nhật dữ liệu
     location.href = '/StudentCrud/Index'
 });
+
 connection.on("loadCateGory", function () {
     //location.reload(); // Tải lại trang để cập nhật dữ liệu
     location.href = '/Admin/CateGoryManagement'
+
+connection.on("loadProduct", function () {
+    //location.reload(); // Tải lại trang để cập nhật dữ liệu
+    location.href = '/Admin/ProductManagement'
+
 });
 
 connection.start().catch(function (err) {
