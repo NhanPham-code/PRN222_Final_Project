@@ -400,3 +400,4 @@ FodyWeavers.xsd
 *.sln.iml
 .vs/
 appsettings.json
+appsettings.Development.json
