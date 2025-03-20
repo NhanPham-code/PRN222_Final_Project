@@ -1,29 +1,70 @@
 ﻿using BLL.Interfaces;
 using DataAccess.Models;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace PRN222_Final_Project.Controllers
 {
     public class ContactController : Controller
     {
-        private ICrudRepo<Category, int> _categoryRepo;
+        private ICrudRepo<Feedback, int> _feedbackRepo;
 
-        public ContactController(ICrudRepo<Category, int> _categoryRepo)
+        public ContactController(ICrudRepo<Feedback, int> feedbackRepo)
         {
-            this._categoryRepo = _categoryRepo;
+            this._feedbackRepo = feedbackRepo;
         }
 
         public async Task<IActionResult> Index()
         {
-            // get category
-            var categories = (await _categoryRepo.GetAll()).ToList();
-            if (categories != null)
+            var feedbacks = await _feedbackRepo.GetAllWithInclude(f => f.User);
+            int? userId = HttpContext.Session.GetInt32("UserId");
+
+            if (userId.HasValue)
             {
-                ViewBag.Categories = categories;
+                var customerFeedback = feedbacks.FirstOrDefault(f => f.User.UserId == userId.Value);
+                ViewBag.CustomerFeedback = customerFeedback;
             }
 
+            return View(feedbacks);
+        }
 
-            return View();
+        [HttpPost]
+        public async Task<IActionResult> SubmitFeedback(string suggestion)
+        {
+            int? userId = HttpContext.Session.GetInt32("UserId");
+
+            // Nếu chưa đăng nhập, chuyển hướng đến trang đăng nhập
+            if (!userId.HasValue)
+            {
+                return RedirectToAction("Login", "Common");
+            }
+
+            int parsedCustomerId = userId.Value;
+
+            var feedbacks = await _feedbackRepo.GetAllWithInclude(f => f.User);
+            Console.WriteLine($"Tổng số feedback lấy được: {feedbacks.Count()}");
+
+            var existingFeedback = feedbacks.FirstOrDefault(f => f.User != null && f.User.UserId == parsedCustomerId);
+
+            if (existingFeedback != null)
+            {
+                Console.WriteLine("Cập nhật feedback cũ.");
+                existingFeedback.Description = suggestion;
+                await _feedbackRepo.Update(existingFeedback);
+            }
+            else
+            {
+                Console.WriteLine("Thêm mới feedback.");
+                var newFeedback = new Feedback
+                {
+                    UserId = parsedCustomerId,
+                    Description = suggestion,
+                    SubmittedDate = DateTime.Now
+                };
+                await _feedbackRepo.Add(newFeedback);
+            }
+
+            return RedirectToAction("Index");
         }
     }
 }
