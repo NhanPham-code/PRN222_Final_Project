@@ -55,14 +55,6 @@ namespace PRN222_Final_Project
                 options.Cookie.IsEssential = true;
             });
 
-            builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-            .AddCookie(options =>
-            {
-                options.LoginPath = "/Common/Login"; // Đường dẫn đến trang đăng nhập
-                options.LogoutPath = "/Common/Logout"; // Đường dẫn đăng xuất
-                //options.AccessDeniedPath = "/Common/AccessDenied"; // Trang lỗi nếu không có quyền
-            });
-
 
             var app = builder.Build();
 
@@ -77,32 +69,12 @@ namespace PRN222_Final_Project
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
- /*           app.UseStaticFiles(new StaticFileOptions
-            {
-                FileProvider = new PhysicalFileProvider(
-                    Path.Combine(Directory.GetCurrentDirectory(), "Orders", "HistoryDetail")),
-                RequestPath = "/Orders/HistoryDetail"
-            });*/
-
             app.UseRouting();
 
             app.UseSession(); // add session
 
             app.UseAuthentication(); // Phải trước UseAuthorization
             app.UseAuthorization();  // Phải sau UseAuthentication
-
-/*            app.Use(async (context, next) =>
-            {
-                if (context.Request.Path.StartsWithSegments("/Orders/HistoryDetails"))
-                {
-                    if (!context.User.Identity.IsAuthenticated)
-                    {
-                        context.Response.Redirect("/Common/Login");
-                        return;
-                    }
-                }
-                await next();
-            });*/
 
             app.MapControllerRoute(
                 name: "default",
