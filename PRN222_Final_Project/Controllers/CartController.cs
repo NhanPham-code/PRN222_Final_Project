@@ -2,6 +2,7 @@
 using BLL.Services;
 using DataAccess.Models;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace PRN222_Final_Project.Controllers
 {
@@ -76,6 +77,8 @@ namespace PRN222_Final_Project.Controllers
         [HttpPost]
         public async Task<IActionResult> CheckOut(List<int> cartIds)
         {
+            TempData["SelectedCartIds"] = JsonConvert.SerializeObject(cartIds);
+
             int userId = (int)HttpContext.Session.GetInt32("UserId");
             if (userId == null)
             {
