@@ -1,0 +1,105 @@
+﻿@using DataAccess.Models
+@using System.Linq
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    ViewData["Title"] = "Order History Detail";
+    var orderDetails = Model as List<OrderDetail>;
+}
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - BakeryShop</title>
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="~/css/Cart.css" asp-append-version="true">
+
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+
+    <!-- Bootstrap 5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+
+</head>
+
+<body>
+    <div class="hero" style="color: #fff">
+        <h1 class="header-cart text-center">HISTORY</h1>
+        <div class="breadcrumb-container d-flex justify-content-center">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-0">
+                    <li class="breadcrumb-item">
+                        <a class="nav-link @(ViewContext.RouteData.Values["action"].ToString() == "Index" && ViewContext.RouteData.Values["controller"].ToString() == "Home" ? "active" : "")"
+                           asp-controller="Home" asp-action="Index">Home</a>
+                    </li>
+                    <li class="breadcrumb-item active" aria-current="page" style="color: #fff"></li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <div class="container">
+        @if (!orderDetails.Any())
+        {
+            <div class="alert alert-info mt-5">
+                You don't have any orders yet.
+            </div>
+        }
+        else
+        {
+            <div class="table-responsive mt-5">
+                <table class="table table-striped table-hover" id="orderTable">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Product Image</th>
+                            <th>Product Name</th>
+                            <th>Quantity</th>
+                            <th>Unit Price</th>
+                            <th>Total Price</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var orderDetail in orderDetails.ToList())
+                        {
+                            <tr>
+                                <td>
+                                    <img src="~/@orderDetail.Product.ImageUrl" class="product-image" width="50">
+                                </td>
+                                <td>@orderDetail?.Product?.ProductName</td>
+                                <td>@orderDetail?.Quantity</td>
+                                <td>@orderDetail?.UnitPrice.ToString("C")</td> <!-- Hiển thị giá theo định dạng tiền tệ -->
+                                <td>
+                                    @{
+                                        var totalPrice = orderDetail?.Quantity * orderDetail?.UnitPrice;
+                                    }
+                                    @totalPrice?.ToString("C")
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+    </div>
+
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.2.1/css/dataTables.dataTables.css" />
+
+    <script src="https://cdn.datatables.net/2.2.1/js/dataTables.js"></script>
+
+    @section Scripts {
+        <script>
+            var js = jQuery.noConflict(true); //handle conflict of dataTable
+            js(document).ready(function () {
+            });
+        </script>
+    }
+</body>

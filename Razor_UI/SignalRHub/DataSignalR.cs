@@ -8,5 +8,10 @@ namespace Razor_UI.SignalRHub
         {
             await Clients.All.SendAsync("ReceiveMessage", message);
         }
+
+        public async Task UpdatePaymentStatus(int orderId, string status)
+        {
+            await Clients.All.SendAsync("ReceivePaymentUpdate", orderId, status);
+        }
     }
 }

@@ -1,4 +1,4 @@
-using BLL.Interfaces;
+﻿using BLL.Interfaces;
 using BLL.Services;
 using DataAccess.DAOs;
 using DataAccess.Models;
@@ -15,7 +15,7 @@ namespace Razor_UI
 
             // Add services to the container.
             builder.Services.AddRazorPages();
-
+                
             // Inject SignalR
             builder.Services.AddSignalR();
 
@@ -43,6 +43,7 @@ namespace Razor_UI
             app.UseStaticFiles();
 
             app.UseRouting();
+
 
             app.UseAuthorization();
 

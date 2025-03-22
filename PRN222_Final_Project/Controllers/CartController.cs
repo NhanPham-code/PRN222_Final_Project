@@ -2,6 +2,7 @@
 using BLL.Services;
 using DataAccess.Models;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace PRN222_Final_Project.Controllers
 {
@@ -50,7 +51,7 @@ namespace PRN222_Final_Project.Controllers
             return RedirectToAction("Index");
         }
 
- 
+
         [HttpPost]
         public async Task<IActionResult> UpdateQuantity(List<int> cartID, List<int> quantity)
         {
@@ -76,6 +77,8 @@ namespace PRN222_Final_Project.Controllers
         [HttpPost]
         public async Task<IActionResult> CheckOut(List<int> cartIds)
         {
+            /*TempData["SelectedCartIds"] = JsonConvert.SerializeObject(cartIds);*/
+
             int userId = (int)HttpContext.Session.GetInt32("UserId");
             if (userId == null)
             {
@@ -91,8 +94,6 @@ namespace PRN222_Final_Project.Controllers
             {
                 return RedirectToAction("Cart");
             }
-
-
             var User = await _userRepo.GetByIdWithInclude(userId, "UserId", u => u.Carts, u => u.Feedbacks, u => u.Orders);
             ViewBag.User = User;
 

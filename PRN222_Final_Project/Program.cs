@@ -4,7 +4,9 @@ using DataAccess.DAOs;
 using DataAccess.Models;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
 using PRN222_Final_Project.SignalRHub;
+using Microsoft.Extensions.FileProviders;
 
 namespace PRN222_Final_Project
 {
@@ -30,6 +32,9 @@ namespace PRN222_Final_Project
             // Inject Repo
             builder.Services.AddScoped(typeof(ICrudRepo<,>), typeof(CrudRepo<,>));
 
+            //Inject Order Service
+            builder.Services.AddScoped(typeof(OrderService));
+
             // Inject Product Service
             builder.Services.AddScoped(typeof(ProductService));
 
@@ -50,14 +55,6 @@ namespace PRN222_Final_Project
                 options.Cookie.IsEssential = true;
             });
 
-            /*builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-            .AddCookie(options =>
-            {
-                options.LoginPath = "/Common/Login"; // Đường dẫn đến trang đăng nhập
-                options.LogoutPath = "/Common/Logout"; // Đường dẫn đăng xuất
-                options.AccessDeniedPath = "/Common/AccessDenied"; // Trang lỗi nếu không có quyền
-            });*/
-
 
             var app = builder.Build();
 
@@ -76,7 +73,8 @@ namespace PRN222_Final_Project
 
             app.UseSession(); // add session
 
-            app.UseAuthorization();
+            app.UseAuthentication(); // Phải trước UseAuthorization
+            app.UseAuthorization();  // Phải sau UseAuthentication
 
             app.MapControllerRoute(
                 name: "default",

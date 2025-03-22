@@ -69,13 +69,21 @@
             </tbody>
         </table>
 
-        <h3 class="text-end">Total Price: @(cartItems?.Sum(item => item.Product.Price * item.Quantity) ?? 0)</h3>
+        @{
+            TempData["TotalPrice"] = (decimal)(cartItems?.Sum(item => item.Product.Price * item.Quantity) ?? 0);
+        }
+        <h3 class="text-end">Total Price: @TempData["TotalPrice"]</h3>
+
 
         @{
             User User = ViewBag.User;
         }
         <form id="checkoutForm" method="post" asp-controller="Orders" asp-action="CreateOrder">
             @Html.AntiForgeryToken()
+
+            <input type="hidden" id="totalPriceField" name="totalPrice" value="@TempData["TotalPrice"]" />
+
+
 
             <h1 class="text-center fw-bold mb-4 mt-4" style="font-family: Arial, sans-serif;">Please enter your information</h1>
 
