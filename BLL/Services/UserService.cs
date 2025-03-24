@@ -1,5 +1,6 @@
 ﻿using BLL.Interfaces;
 using DataAccess.Models;
+using Microsoft.AspNetCore.SignalR;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +12,7 @@ namespace BLL.Services
 {
     public class UserService
     {
-        private ICrudRepo<User, int> _userRepo;
+        private readonly ICrudRepo<User, int> _userRepo;
 
         public UserService(ICrudRepo<User, int> userRepo)
         {
@@ -94,6 +95,96 @@ namespace BLL.Services
             await _userRepo.Add(newUser);
 
             return newUser;
+        }
+
+        public async Task<User> GetUserById(int UserId)
+        {
+            var user = await _userRepo.GetByIdWithInclude(UserId, "UserId", u => u.Carts, u => u.Feedbacks, u => u.Orders);
+            return user;
+        }
+
+        public async Task UpdateUser(User user)
+        {
+            if (user == null)
+            {
+                return;
+            }
+
+            await _userRepo.Update(user);
+        }
+        
+        public async Task<IEnumerable<User>> GetAllUser()
+        {
+            var userList = await _userRepo.GetAllWithInclude(u => u.Carts, u => u.Orders, u => u.Feedbacks);
+            return (userList.ToList());
+        }
+
+        public async Task<bool> DeleteUser(int userId)
+        {
+            var user = await _userRepo.GetByIdWithInclude(userId, "UserId", u => u.Feedbacks, u => u.Carts, u => u.Orders);
+            
+
+            if (user == null)
+            {
+                return false;
+            } else if (user.Feedbacks.Any() || user.Orders.Any() || user.Carts.Any())
+            {
+                return false;
+            } else
+            {
+                await _userRepo.Delete(user);
+                return true;
+            }
+        }
+
+        public async Task<bool> ResetPasswordByEmail(string email, string newPassword)
+        {
+            if(string.IsNullOrEmpty(email) || string.IsNullOrEmpty(newPassword))
+            {
+                return false;
+            }
+
+            // get user by email
+            var user = await GetUserByEmail(email);
+
+            if(user == null)
+            {
+                return false;
+            }
+
+            // Hash password
+            byte[] passwordSalt, passwordHash;
+            HashPassword(newPassword, out passwordSalt, out passwordHash);
+
+            // set new password
+            user.PasswordSalt = passwordSalt;
+            user.PasswordHash = passwordHash;
+
+            // update to DB
+            await _userRepo.Update(user);
+
+            return true;
+        }
+
+        public async Task<User> GetUserByEmail(string email)
+        {
+            var userList = await _userRepo.GetAllWithInclude(u => u.Carts, u => u.Feedbacks, u => u.Orders);
+
+            var user = userList.FirstOrDefault(u => u.Email == email);
+            return user;
+        }
+
+        public async Task<IEnumerable<User>> Search(string searchKey)
+        {
+            searchKey = searchKey.ToLower();
+
+            var userList = await _userRepo.GetAllWithInclude(u => u.Carts, u => u.Feedbacks, u => u.Orders);
+
+            var searchListResult = userList.Where(u => u.Email.ToLower().Contains(searchKey) || u.FullName.ToLower().Contains(searchKey)
+                                            || u.PhoneNumber.Contains(searchKey))
+                                            .ToList();
+
+            return searchListResult;
         }
     }
 }

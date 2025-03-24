@@ -106,6 +106,12 @@
 </head>
 
 <body>
+
+    @if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
+    {
+        <div class="alert alert-danger">@ViewBag.ErrorMessage</div>
+    }
+
     <div class="background">
         <div class="forgot-container">
             <div class="container2">

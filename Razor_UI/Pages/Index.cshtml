@@ -1,72 +1,127 @@
 ﻿@page
 @model IndexModel
 @{
-    ViewData["Title"] = "Home page";
+    ViewData["Title"] = "Login";
 }
 
-<!DOCTYPE html>
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quản lí admin</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <style>
+<style>
+    /* Nền tổng thể */
+    body {
+        font-family: Arial, sans-serif;
+        background: linear-gradient(to right, #6a11cb, #2575fc);
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+    }
 
-        .main-content {
-            transition: margin-left 0.3s ease; /* Chuyển động mượt khi thay đổi */
-            align-items: center;
+    /* Khung chứa form */
+    .login-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+    }
+
+    .login-box {
+        background: #fff;
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        width: 400px;
+        transition: transform 0.3s ease-in-out;
+    }
+
+        .login-box:hover {
+            transform: scale(1.02);
         }
 
-        .sidebar.hidden + .main-content {
-            margin-left: 0; /* Co giãn khi sidebar ẩn */
-            width: 100%; /* Chiếm toàn bộ khi sidebar ẩn */
+    h2 {
+        text-align: center;
+        color: #333;
+        font-size: 24px;
+        margin-bottom: 20px;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    label {
+        font-weight: bold;
+        display: block;
+        margin-bottom: 5px;
+        color: #333;
+    }
+
+    input {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        transition: all 0.3s ease-in-out;
+        font-size: 16px;
+    }
+
+        input:focus {
+            border-color: #007bff;
+            outline: none;
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
         }
 
-        .container {
-            max-width: 80%;
-            margin: auto;
-            background: #fff;
-            padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-            margin-top: 50px;
-            margin-bottom: 20px;
-        }
-        /* Nút thêm mới */
-        .add-btn {
-            display: inline-block; /* Để giữ kiểu nút */
-            text-decoration: none; /* Bỏ gạch chân */
-            font-size: 16px; /* Điều chỉnh kích thước chữ */
-            font-weight: bold; /* In đậm chữ */
-            text-transform: uppercase; /* Chữ in hoa */
-            background-color: #28a745;
-            color: #fff;
-            padding: 10px 15px;
-            border-radius: 5px;
-            transition: background-color 0.3s ease, transform 0.3s ease;
-            margin-bottom: 20px;
+    /* Nút đăng nhập */
+    button {
+        width: 100%;
+        padding: 12px;
+        background: #007bff;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 18px;
+        font-weight: bold;
+        transition: background 0.3s ease-in-out, transform 0.2s;
+    }
+
+        button:hover {
+            background: #0056b3;
+            transform: scale(1.05);
         }
 
-            .add-btn:hover {
-                background-color: #218838;
-                transform: translateY(-2px);
-            }
+    /* Hiển thị thông báo lỗi */
+    .alert {
+        color: #fff;
+        background: #dc3545;
+        padding: 12px;
+        border-radius: 6px;
+        text-align: center;
+        margin-bottom: 15px;
+        font-weight: bold;
+    }
+</style>
 
-    </style>
-</head>
-<body>
+<!-- Giao diện đăng nhập -->
+<div class="login-container">
+    <div class="login-box">
+        <h2>Login</h2>
 
-    <div class="main-content">
-        <div class="container">
-            <div class="action-buttons">
-                <a asp-page="/Admin/ProductManagement" class="add-btn">Product</a>
-                <a asp-page="/Admin/CategoryManagement" class="add-btn">Category</a>
-                <a asp-page="/Admin/AccountManagement" class="add-btn">Account</a>
-                <a asp-page="/Admin/OrderManagement" class="add-btn">Order</a>
-                <a asp-page="/Admin/FeedbackManagement" class="add-btn">Feedback</a>
-                <a asp-page="/Admin/CategoryManagement" class="add-btn">Revenue Chart</a>
+        @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+        {
+            <div class="alert alert-danger">@Model.ErrorMessage</div>
+        }
+
+        <form method="post">
+            <div class="form-group">
+                <label for="username">Email</label>
+                <input type="text" id="email" class="form-control" name="email" required>
             </div>
-        </div>
-    </div>
 
-</body>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" class="form-control" name="password" required>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Login</button>
+        </form>
+    </div>
+</div>

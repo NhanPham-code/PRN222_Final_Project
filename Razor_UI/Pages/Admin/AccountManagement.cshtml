@@ -365,83 +365,52 @@
 </head>
 
 <body>
-  
+
+    @if (!string.IsNullOrEmpty(Model.Message))
+    {
+        <div class="alert alert-danger">@Model.Message</div>
+    }
 
     <div class="main-content">
         <div class="container">
+
             <div class="header">
-                <div class="search-group">
-                    <input type="text" id="search" placeholder="Search by account or role">
+                <form class="search-group" method="post" asp-page-handler="Search">
+                    <input type="text" id="search" placeholder="Search by account" asp-for="@Model.SearchKey">
                     <button class="search-btn" id="searchBtn">Search</button>
-                </div>
+                </form>
             </div>
 
             <!-- Table Section -->
             <table>
                 <thead>
                     <tr>
-                        <th class="name-column">ID</th>
+                        <th class="name-column">Full Name</th>
                         <th class="name-column">Email</th>
-                        <th class="name-column">Password</th>
                         <th class="name-column">Role</th>
-                        <th class="name-column">Status</th>
-                        <th class="name-column">Actions</th>
+                        <th class="name-column">Address</th>
+                        <th class="name-column">Phone Number</th>
+                        <th class="name-column">Action</th>
                     </tr>
                 </thead>
                 <tbody id="accountTable">
-                    <tr>
-                        <td>1</td>
-                        <td>john.doe@example.com</td>
-                        <td>*******</td>
-                        <td>User</td>
-                        <td>Active</td>
-                        <td><button class="delete-btn" onclick="deleteAccount(1)">Delete</button></td>
-                    </tr>
-                    <tr>
-                        <td>2</td>
-                        <td>jane.smith@example.com</td>
-                        <td>*******</td>
-                        <td>User</td>
-                        <td>Inactive</td>
-                        <td><button class="delete-btn" onclick="deleteAccount(2)">Delete</button></td>
-                    </tr>
-                    <tr>
-                        <td>3</td>
-                        <td>michael.brown@example.com</td>
-                        <td>*******</td>
-                        <td>User</td>
-                        <td>Active</td>
-                        <td><button class="delete-btn" onclick="deleteAccount(3)">Delete</button></td>
-                    </tr>
+                    @foreach(var user in Model.UserList)
+                    {
+                        <tr>
+                            <td>@user.FullName</td>
+                            <td>@user.Email</td>
+                            <td>@user.Role</td>
+                            <td>@user.Address</td>
+                            <td>@user.PhoneNumber</td>
+                            @if(user.Role.ToLower().Equals("admin") == false)
+                            {
+                                <td><a class="delete-btn" style="text-decoration: none" asp-route-userId="@user.UserId" asp-page-handler="Delete">Delete</a></td>
+                            }
+                        </tr>
+                    }
                 </tbody>
             </table>
-
-            <!-- Pagination Controls -->
-            <div id="pagination" class="pagination"></div>
         </div>
     </div>
-
-    <script src="/js/AccountManagement.js"></script>
-
-    <script>
-        function loadHTML(elementId, url) {
-            fetch(url)
-                .then(response => response.text())
-                .then(data => {
-                    document.getElementById(elementId).innerHTML = data;
-                    const script = document.createElement('script');
-                    script.src = 'Admin-js/Navbars.js';
-                    document.body.appendChild(script);
-                });
-        }
-
-        loadHTML('navbars-placeholder', 'Navbars.html');
-
-        function deleteAccount(id) {
-            const row = document.querySelector(`#accountTable tr:nth-child(${id})`);
-            if (row) row.remove();
-        }
-    </script>
 </body>
-
 </html>
