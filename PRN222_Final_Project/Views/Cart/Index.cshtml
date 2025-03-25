@@ -36,12 +36,19 @@
     </div>
 
     <div class="container">
+
+        @if (TempData["OrderErrors"] != null)
+        {
+            <div class="alert alert-danger">
+                @TempData["OrderErrors"]
+            </div>
+        }
         
         <button id="updateQuantityBtn" class="btn btn-warning my-3">Update Quantity</button>
         <form method="post" asp-controller="Cart" asp-action="UpdateQuantity">
             
             <button type="submit" id="confirmUpdateBtn" class="btn btn-success" style="display: none;">Confirm</button>
-            <table id="cartTable" class="table table-striped">
+            <table id="cartTable" class="table table-striped" data-user-id="@ViewData["UserID"]">
                 <thead>
                     <tr>
                         <th>Select</th>
@@ -98,6 +105,7 @@
     </div>
 
     <script>
+
         $(document).ready(function () {
             $("#updateQuantityBtn").click(function () {
                 $(".quantity-input").prop("readonly", function (_, attr) { return !attr; });
@@ -129,6 +137,8 @@
                     });
                 }
             });
+
+
         });
     </script>
 </body>

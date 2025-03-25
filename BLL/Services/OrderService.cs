@@ -7,6 +7,8 @@ using System.Text;
 using System.Threading.Tasks;
 using BLL.Interfaces;
 using System.Runtime.CompilerServices;
+using Microsoft.AspNetCore.SignalR;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 
 namespace BLL.Services
 {
@@ -17,6 +19,9 @@ namespace BLL.Services
         private ICrudRepo<Product, int> _productRepo;
         private ICrudRepo<OrderDetail, int> _orderDetailRepo;
         private readonly CartService _cartService;
+
+        List<string> errorMessages = new List<string>();
+
 
         public OrderService(ICrudRepo<Order, int> oderRepo, ICrudRepo<User, int> userRepo, 
             ICrudRepo<OrderDetail, int> orderDetailRepo, ICrudRepo<Product, int> productRepo,
@@ -50,6 +55,12 @@ namespace BLL.Services
 
         public async Task<Order> CreateOrder(string address, int userID, IEnumerable<Cart> selectedItems, decimal total)
         {
+            bool isStockAvailable = await CheckStockAvailability(selectedItems);
+            if (!isStockAvailable)
+            {
+                return null;
+            }
+
             //create order
             Order newOrder = new Order
             {
@@ -93,6 +104,21 @@ namespace BLL.Services
             return newOrder;
 
             
+        }
+
+        public async Task<bool> CheckStockAvailability(IEnumerable<Cart> selectedItems)
+        {
+            foreach (Cart cart in selectedItems)
+            {
+                var productInDB = await _productRepo.GetById((int)cart.ProductId);
+
+                if (productInDB.StockQuantity < cart.Quantity)
+                {
+                    await _cartService.RemoveProductFromCart(cart.CartId);
+                    return false; // Nếu có sản phẩm không đủ hàng
+                }
+            }
+            return true; // Tất cả sản phẩm đều đủ hàng
         }
     }
 }

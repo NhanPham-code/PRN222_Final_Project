@@ -13,11 +13,12 @@ var connection = new signalR.HubConnectionBuilder()
 connection.on("feedback", function () {
     //location.reload(); // Tải lại trang để cập nhật dữ liệu
     location.href = '/Admin/FeedbackManagement'
+});
 
 connection.on("loadCateGory", function () {
     //location.reload(); // Tải lại trang để cập nhật dữ liệu
     location.href = '/Admin/CateGoryManagement'
-
+});
 connection.on("loadProduct", function () {
     //location.reload(); // Tải lại trang để cập nhật dữ liệu
     location.href = '/Admin/ProductManagement'
@@ -40,12 +41,33 @@ connection.on("ReceiveOrderStatusUpdate", function (orderId, orderStatus) {
     $(`select.order-status[data-order-id="${orderId}"]`).val(orderStatus);
 });
 
+$('.order-status').change(function () {
+    const orderId = $(this).data('order-id');
+    const orderStatus = $(this).val();
+
+    $.ajax({
+        url: window.location.pathname,
+        type: 'POST',
+        data: {
+            OrderId: orderId,
+            OrderStatus: orderStatus,
+            __RequestVerificationToken: $('input[name="__RequestVerificationToken"]').val()
+        },
+        success: function (result) {
+            console.log("Order status updated successfully");
+        },
+        error: function (error) {
+            console.error("Error updating order status:", error);
+        }
+    });
+});
+
 $('.payment-status').change(function () {
     const orderId = $(this).data('order-id');
     const paymentStatus = $(this).val();
 
     $.ajax({
-        url: window.location.pathname,
+        url: window.location.pathname, //lấy đường dẫn hiện tại
         type: 'POST',
         data: {
             OrderId: orderId,
@@ -59,25 +81,4 @@ $('.payment-status').change(function () {
             console.error("Error updating payment status:", error);
         }
     });
-});
-
-    $('.order-status').change(function () {
-        const orderId = $(this).data('order-id');
-        const orderStatus = $(this).val();
-
-        $.ajax({
-            url: window.location.pathname,
-            type: 'POST',
-            data: {
-                OrderId: orderId,
-                OrderStatus: orderStatus,
-                __RequestVerificationToken: $('input[name="__RequestVerificationToken"]').val()
-            },
-            success: function (result) {
-                console.log("Order status updated successfully");
-            },
-            error: function (error) {
-                console.error("Error updating order status:", error);
-            }
-        });
-    });
+});                                    
