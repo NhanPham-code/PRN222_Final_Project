@@ -14,9 +14,9 @@ namespace PRN222_Final_Project.SignalRHub
             await Clients.All.SendAsync("ReceiveOrderNotification", message);
         }
 
-        public async Task ReloadCart(string userId)
+        public async Task ReloadCart()
         {
-            await Clients.User(userId).SendAsync("ReloadCart");
+            await Clients.All.SendAsync("ReloadCart");
         }
     }
 }

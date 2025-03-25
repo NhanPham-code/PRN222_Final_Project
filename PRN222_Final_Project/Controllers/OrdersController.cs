@@ -83,7 +83,7 @@ namespace PRN222_Final_Project.Controllers
                 return RedirectToAction("Index", "Cart");
             }
 
-            await _hubContext.Clients.User(userId.ToString()).SendAsync("ReloadCart");
+            await _hubContext.Clients.All.SendAsync("ReloadCart");
 
             return RedirectToAction("Index", "Home"); //Về trang chủ
         }

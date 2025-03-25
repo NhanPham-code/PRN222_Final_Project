@@ -69,6 +69,7 @@ namespace PRN222_Final_Project
             app.UseStaticFiles();
 
             app.UseRouting();
+            app.MapHub<DataSignalR>("/DataSignalR"); // SignalR - config hub endpoint
 
             app.UseSession(); // add session
 
@@ -79,7 +80,7 @@ namespace PRN222_Final_Project
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
 
-            app.MapHub<DataSignalR>("/DataUpdate"); // SignalR - config hub endpoint
+            
 
             app.Run();
         }
