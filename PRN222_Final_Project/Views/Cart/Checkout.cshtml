@@ -5,6 +5,7 @@
 @{
     ViewData["Title"] = "Checkout";
     var cartItems = Model as List<Cart>;
+    var cartIDs = ViewBag.CartID as List<int>;
 }
 
 <head>
@@ -78,12 +79,12 @@
         @{
             User User = ViewBag.User;
         }
-        <form id="checkoutForm" method="post" asp-controller="Orders" asp-action="CreateOrder">
+        <form id="checkoutForm" method="post" asp-controller="Orders" asp-action="CreateOrder" data-user-id="@ViewData["UserID"]">
             @Html.AntiForgeryToken()
 
             <input type="hidden" id="totalPriceField" name="totalPrice" value="@TempData["TotalPrice"]" />
 
-
+            <input type="hidden" name="cartIds" value="@string.Join(",", cartIDs)" />
 
             <h1 class="text-center fw-bold mb-4 mt-4" style="font-family: Arial, sans-serif;">Please enter your information</h1>
 
@@ -122,8 +123,11 @@
     @section Scripts {
         <script>
             var js = jQuery.noConflict(true); //handle conflict of dataTable
+            var currentUserID = '@ViewData.["UserID"]';
+
             js(document).ready(function () {
                 let orderItem = [];
+                console.log(currentUserID);
                 var cartData = [
                     {
                         image: '/img/PRODUCT/Special/Tiramisu.png',
@@ -238,6 +242,7 @@
                         e.preventDefault();
                     }
                 });
+
             });
         </script>
     }

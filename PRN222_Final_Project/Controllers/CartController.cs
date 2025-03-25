@@ -23,6 +23,8 @@ namespace PRN222_Final_Project.Controllers
         public async Task<IActionResult> Index()
         {
             int? userId = HttpContext.Session.GetInt32("UserId");
+            ViewData["UserID"] = userId;
+
             if (userId == null)
             {
                 return RedirectToAction("Login", "Common");
@@ -77,9 +79,12 @@ namespace PRN222_Final_Project.Controllers
         [HttpPost]
         public async Task<IActionResult> CheckOut(List<int> cartIds)
         {
-            /*TempData["SelectedCartIds"] = JsonConvert.SerializeObject(cartIds);*/
+            ViewBag.CartID = cartIds;
 
             int userId = (int)HttpContext.Session.GetInt32("UserId");
+
+            ViewData["UserID"] = userId;
+
             if (userId == null)
             {
                 return RedirectToAction("Login", "Common");

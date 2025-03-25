@@ -2,6 +2,10 @@
 // for details on configuring this project to bundle and minify static web assets.
 
 // Write your JavaScript code.
+const userId = $("#cartTable").data("user-id");
+
+console.log("User ID:", userId);
+
 var connection = new signalR.HubConnectionBuilder()
     .withUrl("/DataUpdate") // goi den DataUpdateHub duoc config trong Program.cs
     .build();
@@ -15,4 +19,9 @@ connection.on("load", function () {
 
 connection.start().catch(function (err) {
     return console.error(err.toString());
+});
+
+connection.on("ReloadCart", function () {
+    console.log("Received ReloadCart event");
+    location.href = '/Cart/Index'
 });

@@ -63,18 +63,22 @@ namespace Razor_UI.Pages.Admin
                 return NotFound();
             }
 
-            order.PaymentStatus = PaymentStatus;
-            order.OrderStatus = OrderStatus;
-            await _orderRepo.Update(order);
+            bool hasChanged = false;
 
             if (!string.IsNullOrEmpty(PaymentStatus))
             {
+                order.PaymentStatus = PaymentStatus;
+                hasChanged = true;
                 await _hubContext.Clients.All.SendAsync("ReceivePaymentUpdate", OrderId, PaymentStatus);
+                await _orderRepo.Update(order);
             }
 
             if (!string.IsNullOrEmpty(OrderStatus))
             {
+                order.OrderStatus = OrderStatus;
+                hasChanged = true;
                 await _hubContext.Clients.All.SendAsync("ReceiveOrderStatusUpdate", OrderId, OrderStatus);
+                await _orderRepo.Update(order);
             }
 
             return RedirectToPage();

@@ -8,6 +8,8 @@ using DataAccess.Models;
 using BLL.Interfaces;
 using BLL.Services;
 using Newtonsoft.Json;
+using Microsoft.AspNetCore.SignalR;
+using PRN222_Final_Project.SignalRHub;
 
 namespace PRN222_Final_Project.Controllers
 {
@@ -20,10 +22,11 @@ namespace PRN222_Final_Project.Controllers
         private readonly CartService _cartService;
         private readonly ProductService _productService;
         private readonly ILogger<OrdersController> _logger;
+        private readonly IHubContext<DataSignalR> _hubContext;
 
         public OrdersController(ICrudRepo<Order, int> orderRepo, OrderService orderService,
             ILogger<OrdersController> logger, UserService userService, ICrudRepo<User, int> userRepo,
-            CartService cartService, ProductService productService)
+            CartService cartService, ProductService productService, IHubContext<DataSignalR> hubContext)
         {
             _orderRepo = orderRepo;
             _orderService = orderService;
@@ -32,6 +35,7 @@ namespace PRN222_Final_Project.Controllers
             _userRepo = userRepo;
             _cartService = cartService;
             _productService = productService;
+            _hubContext = hubContext;
         }
 
         // GET: Orders
@@ -48,13 +52,20 @@ namespace PRN222_Final_Project.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreateOrder(Order order, string shipping_address, string orderData, decimal totalPrice)
+        public async Task<IActionResult> CreateOrder(Order order, string shipping_address, string orderData, decimal totalPrice, string cartIds)
         {
             // Get userId ben session
             var userId = getUserID();
-            var cartId = getCartList();
+            var cartId = cartIds.Split(',').Select(int.Parse).ToList();
             var selectedItems = (await _cartService.GetCartByCartIds(cartId));
             var total = totalPrice;
+
+            if (selectedItems == null || !selectedItems.Any())
+            {
+                TempData["OrderErrors"] = "You've ordered this cart before. Can't order now";
+                return RedirectToAction("Index", "Cart");
+            }
+
 
             /*_logger.LogInformation($"UserId: {userId}");*/
             // Get user by id
@@ -65,6 +76,15 @@ namespace PRN222_Final_Project.Controllers
             }
 
             var orders = await _orderService.CreateOrder(shipping_address, userId, selectedItems, totalPrice);
+
+            if (order == null)
+            {
+                TempData["OrderErrors"] = "Some products are does not have enough quantity.";
+                return RedirectToAction("Index", "Cart");
+            }
+
+            await _hubContext.Clients.User(userId.ToString()).SendAsync("ReloadCart");
+
             return RedirectToAction("Index", "Home"); //Về trang chủ
         }
 
@@ -93,13 +113,13 @@ namespace PRN222_Final_Project.Controllers
             return View(orderDetails.ToList());
         }
 
-        public List<int> getCartList()
+/*        public List<int> getCartID()
         {
             var cartIdsJson = TempData["SelectedCartIds"] as string;
             var cartIds = JsonConvert.DeserializeObject<List<int>>(cartIdsJson);
 
             return cartIds;
-        }
+        }*/
 
         public decimal GetTotalPrice()
         {

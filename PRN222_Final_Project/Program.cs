@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
 using PRN222_Final_Project.SignalRHub;
-using Microsoft.Extensions.FileProviders;
 
 namespace PRN222_Final_Project
 {
