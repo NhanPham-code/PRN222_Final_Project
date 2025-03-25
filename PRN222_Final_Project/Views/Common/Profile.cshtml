@@ -1,0 +1,85 @@
+﻿@{
+    ViewData["Title"] = "Hồ sơ người dùng";
+}
+
+@model DataAccess.Models.User
+
+<style>
+    .profile-container {
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        width: 400px;
+        max-width: 90%;
+    }
+
+        .profile-container img {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            margin-bottom: 15px;
+        }
+
+    .form-control:disabled {
+        background-color: #f8f9fa;
+        cursor: not-allowed;
+    }
+</style>
+
+@if (ViewData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success" role="alert">
+        @ViewData["SuccessMessage"]
+    </div>
+}
+
+@if(Model  != null)
+{
+    <div class="container mt-4 mb-5">
+        <div class="profile-container mx-auto text-center">
+            <img src="~/img/logo/profile.png" id="profileImage" />
+            <h3>@Model.FullName</h3>
+
+            <form id="profileForm" method="post" asp-controller="Common" asp-action="UpdateProfile">
+                <div class="mb-3">
+                    <label class="form-label"><strong>Email</strong></label>
+                    <input type="email" class="form-control" id="email" name="email" value="@Model.Email" readonly>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label"><strong>Số điện thoại</strong></label>
+                    <input type="text" class="form-control" id="phone" name="phone" value="@Model.PhoneNumber" disabled required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label"><strong>Địa chỉ</strong></label>
+                    <input type="text" class="form-control" id="address" name="address" value="@Model.Address" disabled required>
+                </div>
+
+                <button type="button" id="editBtn" class="btn btn-primary w-100">Chỉnh sửa</button>
+                <button type="submit" id="saveBtn" class="btn btn-success w-100 mt-2 d-none">Lưu</button>
+            </form>
+        </div>
+    </div>
+} else
+{
+    <p class="text-danger">Không tìm thấy thông tin người dùng.</p>
+}
+
+
+<script>
+    document.getElementById("editBtn").addEventListener("click", function () {
+        let inputs = document.querySelectorAll("#profileForm input");
+        let saveBtn = document.getElementById("saveBtn");
+
+        inputs.forEach(input => {
+            if (input.id !== "email") { // Không cho phép chỉnh sửa email
+                input.disabled = !input.disabled;
+            }
+        });
+
+        saveBtn.classList.toggle("d-none"); // Hiện hoặc ẩn nút Lưu
+        this.classList.toggle("d-none"); // Ẩn nút Chỉnh sửa khi bật chế độ chỉnh sửa
+    });
+</script>

@@ -20,6 +20,14 @@
 </head>
 
 <body>
+
+    @if (ViewBag.Error != null)
+    {
+        <div class="alert alert-danger" role="alert">
+            @ViewBag.Error
+        </div>
+    }
+
     <div class="background">
         <div class="container" id="container">
             <!-- Sign Up Form -->
@@ -47,8 +55,6 @@
                         <input type="password" id="signupPassword" placeholder="Password" name="password" required />
                         <i class="fas fa-eye" id="toggleSignupPassword" style="cursor: pointer;" aria-label="Show password"></i>
                     </div>
-                    <span class="error-message">@ViewBag.Error</span>
-
 
                     <button type="submit" class="btn">Register</button>
                     <a class="cancel-link">Cancel</a>

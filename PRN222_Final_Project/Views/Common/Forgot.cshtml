@@ -23,43 +23,143 @@
             font-family: "Oleo Script", serif;
         }
 
+        button:disabled {
+            pointer-events: none; /* Chặn sự kiện click */
+            opacity: 0.6; /* Làm mờ nút để thấy rõ */
+        }
 
     </style>
 </head>
 
 <body>
     <div class="background">
-    <div class="container2">
-        <div class="form-section">
-            <div class="info-section">
+        <div class="container2">
+            <div class="form-section">
                 <h2>Forgot Password</h2>
-                <p>Enter your email address and we'll send you a confirmation code to reset your password.</p>
-            </div>
-            <form id="forgot-password-form">
-                <div class="form-group">
-                    <label for="email">Enter Email:</label>
-                    <input type="email" id="email" required placeholder="Enter your email">
-                </div>
-                <button type="submit" class="btn">Submit Confirmation Code</button>
-            </form>
 
-            <form id="verify-code-form" style="display: none;">
-                <div class="form-group">
-                    <label for="code">Enter the confirmation code:</label>
-                    <input type="text" id="code" maxlength="6" required placeholder="Enter the 6-digit code">
+                <div class="info-section">
+                    <p>Enter your email address and we'll send you a confirmation code to reset your password.</p>
                 </div>
-                <div class="form-group">
-                    <label for="new-password">Enter a new password:</label>
-                    <input type="password" id="new-password" required placeholder="Enter a new password">
+
+                <form id="forgot-password-form">
+                    <div class="form-group">
+                        <label for="email">Nhập Email:</label>
+                        <input type="email" id="email" required placeholder="Nhập email của bạn">
+                    </div>
+                    <button type="submit" class="btn" id="send-otp-btn">Gửi mã xác nhận</button>
+                </form>
+
+                <div id="code-section" style="display: none;">
+                    <form id="verify-code-form">
+                        <div class="form-group">
+                            <label for="code">Nhập mã xác nhận:</label>
+                            <input type="text" id="code" maxlength="6" required placeholder="Nhập mã OTP">
+                        </div>
+                        <button type="submit" class="btn">Xác minh</button>
+                    </form>
                 </div>
-                <button type="submit" class="btn">Reset Password</button>
-            </form>
-            <div>
+
+                <div id="reset-section" style="display: none;">
+                    <form id="reset-password-form">
+                        <div class="form-group">
+                            <label for="new-password">Nhập mật khẩu mới:</label>
+                            <input type="password" id="new-password" required placeholder="Mật khẩu mới">
+                        </div>
+                        <button type="submit" class="btn">Đặt lại mật khẩu</button>
+                    </form>
+                </div>
+
+                <div>
                 <p>Return to the login page? <a href="Login.html" class="sign-in-link">Sign Up</a></p>
+                </div>
             </div>
         </div>
     </div>
-    </div>
 </body>
-
 </html>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+
+        const cooldownTime = 60; // Thời gian chờ (giây)
+        
+        // Hàm bắt đầu đếm ngược
+        function startCountdown() {
+            let timeLeft = cooldownTime;
+            $("#send-otp-btn").prop("disabled", true).text(`Gửi lại (${timeLeft}s)`); // Vô hiệu hóa nút
+            console.log("Nút đã bị vô hiệu hóa");
+
+            let countdownTimer = setInterval(function () {
+                timeLeft--;
+                $("#send-otp-btn").text(`Gửi lại (${timeLeft}s)`);
+                if (timeLeft <= 0) {
+                    clearInterval(countdownTimer);
+                    $("#send-otp-btn").prop("disabled", false).text("Gửi mã xác nhận"); // Kích hoạt lại nút
+                }
+            }, 1000);
+        }
+
+
+        // Gửi email để nhận mã xác nhận
+        $("#forgot-password-form").submit(function (e) {
+            e.preventDefault();
+            var email = $("#email").val();
+
+            startCountdown(); // Gọi hàm đếm ngược để tắt nút gửi mã tránh spam trong lúc gửi mã
+
+            $.ajax({
+                url: "/Common/SendResetCode",
+                type: "POST",
+                data: { email: email }, // Không dùng JSON
+                success: function (response) {
+                    alert(response);
+                    $("#forgot-password-form").hide();
+                    $("#code-section").show();
+                },
+                error: function () {
+                    alert("Lỗi! Không thể gửi mã xác nhận.");
+                }
+            });
+        });
+
+        // Gửi mã code để xác thực
+        $("#verify-code-form").submit(function (e) {
+            e.preventDefault();
+            var code = $("#code").val();
+
+            $.ajax({
+                url: "/Common/VerifyResetCode",
+                type: "POST",
+                data: { code: code }, // Không dùng JSON
+                success: function (response) {
+                    alert(response);
+                    $("#code-section").hide();
+                    $("#reset-section").show();
+                },
+                error: function () {
+                    alert("Mã xác nhận không hợp lệ.");
+                }
+            });
+        });
+
+        // Gửi mật khẩu mới
+        $("#reset-password-form").submit(function (e) {
+            e.preventDefault();
+            var newPassword = $("#new-password").val();
+
+            $.ajax({
+                url: "/Common/ResetPassword",
+                type: "POST",
+                data: { newPassword: newPassword }, // Không dùng JSON
+                success: function (response) {
+                    alert(response);
+                    window.location.href = "/Common/Login";
+                },
+                error: function () {
+                    alert("Lỗi đặt lại mật khẩu.");
+                }
+            });
+        });
+    });
+</script>

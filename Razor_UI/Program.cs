@@ -15,7 +15,10 @@ namespace Razor_UI
 
             // Add services to the container.
             builder.Services.AddRazorPages();
-                
+
+            // Session
+            builder.Services.AddSession();
+
             // Inject SignalR
             builder.Services.AddSignalR();
 
@@ -28,6 +31,9 @@ namespace Razor_UI
 
             // Inject Repo
             builder.Services.AddScoped(typeof(ICrudRepo<,>), typeof(CrudRepo<,>));
+
+            // Inject User Service
+            builder.Services.AddScoped<UserService>();
 
             var app = builder.Build();
 
@@ -48,6 +54,8 @@ namespace Razor_UI
             app.UseAuthorization();
 
             app.MapRazorPages();
+
+            app.UseSession(); // Session
 
             app.MapHub<DataSignalR>("/DataUpdate"); // SignalR - config hub endpoint
 
