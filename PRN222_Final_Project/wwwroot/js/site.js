@@ -7,7 +7,7 @@ const userId = $("#cartTable").data("user-id");
 console.log("User ID:", userId);
 
 var connection = new signalR.HubConnectionBuilder()
-    .withUrl("/DataUpdate") // goi den DataUpdateHub duoc config trong Program.cs
+    .withUrl("/DataSignalR") // goi den DataUpdateHub duoc config trong Program.cs
     .build();
 
 // giong "load" ben edit khi goi signalR update

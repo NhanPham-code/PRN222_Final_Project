@@ -2,7 +2,9 @@
 using BLL.Services;
 using DataAccess.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Newtonsoft.Json;
+using PRN222_Final_Project.SignalRHub;
 
 namespace PRN222_Final_Project.Controllers
 {
@@ -12,12 +14,14 @@ namespace PRN222_Final_Project.Controllers
         private readonly CartService _cartService;
         private ICrudRepo<Category, int> _categoryRepo;
         private ICrudRepo<User, int> _userRepo;
+        private readonly IHubContext<DataSignalR> _hubContext;
 
-        public CartController(CartService cartService, ICrudRepo<Category, int> categoryRepo, ICrudRepo<User, int> userRepo)
+        public CartController(CartService cartService, ICrudRepo<Category, int> categoryRepo, ICrudRepo<User, int> userRepo, IHubContext<DataSignalR> hubContext)
         {
             _cartService = cartService;
             _categoryRepo = categoryRepo;
             _userRepo = userRepo;
+            _hubContext = hubContext;
         }
 
         public async Task<IActionResult> Index()
@@ -36,7 +40,28 @@ namespace PRN222_Final_Project.Controllers
             }
 
 
+
             var cartItems = await _cartService.GetCartByUserId(userId.Value);
+            List<string> errorMessages = new List<string>();
+
+            // Kiểm tra số lượng sản phẩm trong giỏ hàng so với stock
+            foreach (var item in cartItems)
+            {
+                if (item.Quantity > item.Product.StockQuantity)
+                {
+                    // Giảm số lượng trong giỏ hàng xuống mức tối đa có thể
+                    await _cartService.UpdateQuantity(item.CartId, item.Product.StockQuantity);
+
+                    // Thêm thông báo lỗi
+                    errorMessages.Add($"Sản phẩm {item.Product.ProductName} chỉ còn {item.Product.StockQuantity} trong kho, số lượng đã được điều chỉnh.");
+                }
+            }
+
+            if (errorMessages.Count > 0)
+            {
+                TempData["OrderErrors"] = string.Join("<br>", errorMessages);
+            }
+
             return View(cartItems.ToList());
         }
 
