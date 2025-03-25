@@ -32,21 +32,18 @@ namespace Razor_UI.Pages.Admin
         public async Task OnGetAsync()
         {
             Feedback = (await _feedbackRepo.GetAllWithInclude(f => f.User)).ToList();
+
             if (!string.IsNullOrEmpty(SearchQuery))
             {
-                // Kiểm tra nếu `SearchQuery` có thể parse sang DateOnly
-                if (DateOnly.TryParse(SearchQuery, out var searchDate))
-                {
-                    Feedback = Feedback.Where(f => f.SubmittedDate.HasValue && DateOnly.FromDateTime(f.SubmittedDate.Value) == searchDate).ToList();
-                }
-                else
-                {
-                    // Tìm theo mô tả feedback hoặc tên User
-                    Feedback = Feedback.Where(f =>
-                        (!string.IsNullOrEmpty(f.Description) && f.Description.Contains(SearchQuery, StringComparison.OrdinalIgnoreCase)) ||
-                        (f.User != null && !string.IsNullOrEmpty(f.User.FullName) && f.User.FullName.Contains(SearchQuery, StringComparison.OrdinalIgnoreCase))
-                    ).ToList();
-                }
+                Console.WriteLine($"Search Query: {SearchQuery}"); // Debug giá trị nhập vào
+
+                Feedback = Feedback.Where(f =>
+                    (f.Description != null && f.Description.Contains(SearchQuery, StringComparison.OrdinalIgnoreCase)) ||
+                    (f.User != null && f.User.FullName != null && f.User.FullName.Contains(SearchQuery, StringComparison.OrdinalIgnoreCase)) ||
+                    (f.User != null && f.User.Email != null && f.User.Email.Contains(SearchQuery, StringComparison.OrdinalIgnoreCase))
+                ).ToList();
+
+                Console.WriteLine($"Matched Feedback Count: {Feedback.Count}");
             }
         }
 

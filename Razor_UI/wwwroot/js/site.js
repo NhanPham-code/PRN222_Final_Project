@@ -13,11 +13,11 @@ var connection = new signalR.HubConnectionBuilder()
 connection.on("feedback", function () {
     //location.reload(); // Tải lại trang để cập nhật dữ liệu
     location.href = '/Admin/FeedbackManagement'
-
+});
 connection.on("loadCateGory", function () {
     //location.reload(); // Tải lại trang để cập nhật dữ liệu
     location.href = '/Admin/CateGoryManagement'
-
+});
 connection.on("loadProduct", function () {
     //location.reload(); // Tải lại trang để cập nhật dữ liệu
     location.href = '/Admin/ProductManagement'
