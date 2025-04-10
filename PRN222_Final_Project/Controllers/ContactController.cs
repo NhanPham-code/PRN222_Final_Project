@@ -1,6 +1,9 @@
 ﻿using BLL.Interfaces;
 using DataAccess.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
+using Microsoft.EntityFrameworkCore;
+using PRN222_Final_Project.SignalRHub;
 using System.Security.Claims;
 
 namespace PRN222_Final_Project.Controllers
@@ -8,10 +11,12 @@ namespace PRN222_Final_Project.Controllers
     public class ContactController : Controller
     {
         private ICrudRepo<Feedback, int> _feedbackRepo;
+        private readonly IHubContext<DataSignalR> _hubContext;
 
-        public ContactController(ICrudRepo<Feedback, int> feedbackRepo)
-        {
+        public ContactController(ICrudRepo<Feedback, int> feedbackRepo, IHubContext<DataSignalR> hubContext)
+        { 
             this._feedbackRepo = feedbackRepo;
+            this._hubContext = hubContext;
         }
 
         public async Task<IActionResult> Index()
@@ -51,6 +56,7 @@ namespace PRN222_Final_Project.Controllers
                 Console.WriteLine("Cập nhật feedback cũ.");
                 existingFeedback.Description = suggestion;
                 await _feedbackRepo.Update(existingFeedback);
+                await _hubContext.Clients.All.SendAsync("feedback");
             }
             else
             {
@@ -62,6 +68,7 @@ namespace PRN222_Final_Project.Controllers
                     SubmittedDate = DateTime.Now
                 };
                 await _feedbackRepo.Add(newFeedback);
+                await _hubContext.Clients.All.SendAsync("feedback");
             }
 
             return RedirectToAction("Index");

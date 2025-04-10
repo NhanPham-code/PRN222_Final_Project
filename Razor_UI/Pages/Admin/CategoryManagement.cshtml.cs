@@ -53,7 +53,7 @@ namespace Razor_UI.Pages.Admin
                 return Page();
 
             await _categoryRepo.Add(Category);
-            await _hubContext.Clients.All.SendAsync("loadCateGory");
+            await _hubContext.Clients.All.SendAsync("Dang");
 
             return RedirectToPage();
         }

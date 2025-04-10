@@ -16,6 +16,10 @@ connection.on("load", function () {
     //location.reload(); // Tải lại trang để cập nhật dữ liệu
     location.href = '/StudentCrud/Index'
 });
+connection.on("feedback", function () {
+    //location.reload(); // Tải lại trang để cập nhật dữ liệu
+    location.href = '/Contact/Index'
+});
 
 connection.start().catch(function (err) {
     return console.error(err.toString());

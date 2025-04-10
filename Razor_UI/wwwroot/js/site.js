@@ -15,7 +15,7 @@ connection.on("feedback", function () {
     location.href = '/Admin/FeedbackManagement'
 });
 
-connection.on("loadCateGory", function () {
+connection.on("Dang", function () {
     //location.reload(); // Tải lại trang để cập nhật dữ liệu
     location.href = '/Admin/CateGoryManagement'
 });
